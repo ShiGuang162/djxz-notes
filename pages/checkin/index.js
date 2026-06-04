@@ -159,6 +159,7 @@ Page({
   },
 
   hideAddGoalModal() {
+    console.log('hideAddGoalModal called')
     this.setData({ 
       showGoalModal: false,
       newGoal: { title: '', description: '', targetDays: '' }

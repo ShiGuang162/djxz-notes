@@ -1,6 +1,3 @@
-const db = wx.cloud?.database?.() || null
-const _ = db?.command || null
-
 const STORAGE_KEY = 'my_blog_data'
 
 const getLocalData = () => {
@@ -276,8 +273,6 @@ const comment = {
 }
 
 module.exports = {
-  db,
-  _,
   user,
   diary,
   checkin,
