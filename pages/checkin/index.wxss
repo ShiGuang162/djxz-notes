@@ -1,0 +1,415 @@
+.container {
+  min-height: 100vh;
+  background: #f5f5f5;
+  padding-bottom: 120rpx;
+}
+
+.checkin-header {
+  position: relative;
+  padding: 40rpx 30rpx;
+  overflow: hidden;
+}
+
+.header-bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 400rpx;
+  background: linear-gradient(135deg, #52c41a 0%, #3db916 50%, #237804 100%);
+  border-radius: 0 0 40rpx 40rpx;
+}
+
+.header-content {
+  position: relative;
+  z-index: 1;
+}
+
+.checkin-stats {
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 30rpx;
+}
+
+.stat-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.stat-num {
+  font-size: 48rpx;
+  font-weight: 700;
+  color: #fff;
+}
+
+.stat-label {
+  font-size: 24rpx;
+  color: rgba(255, 255, 255, 0.8);
+  margin-top: 8rpx;
+}
+
+.stat-divider {
+  width: 2rpx;
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.checkin-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #fff;
+  border-radius: 40rpx;
+  padding: 28rpx;
+  box-shadow: 0 4rpx 20rpx rgba(82, 196, 26, 0.3);
+}
+
+.checkin-icon {
+  font-size: 36rpx;
+  color: #52c41a;
+  margin-right: 12rpx;
+}
+
+.checkin-text {
+  font-size: 32rpx;
+  font-weight: 600;
+  color: #52c41a;
+}
+
+.checked-badge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 40rpx;
+  padding: 28rpx;
+}
+
+.badge-icon {
+  font-size: 36rpx;
+  margin-right: 12rpx;
+}
+
+.badge-text {
+  font-size: 32rpx;
+  font-weight: 600;
+  color: #fff;
+}
+
+.calendar-section {
+  background: #fff;
+  margin: 20rpx;
+  border-radius: 16rpx;
+  padding: 30rpx;
+}
+
+.calendar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24rpx;
+}
+
+.month-nav {
+  width: 60rpx;
+  height: 60rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f5f5f5;
+  border-radius: 50%;
+}
+
+.nav-icon {
+  font-size: 36rpx;
+  color: #666;
+}
+
+.month-title {
+  font-size: 32rpx;
+  font-weight: 600;
+  color: #333;
+}
+
+.weekdays {
+  display: flex;
+  margin-bottom: 16rpx;
+}
+
+.weekday {
+  flex: 1;
+  text-align: center;
+  font-size: 26rpx;
+  color: #999;
+}
+
+.calendar-grid {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.day-cell {
+  width: calc(100% / 7);
+  aspect-ratio: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.day-num {
+  font-size: 28rpx;
+  color: #333;
+}
+
+.day-dot {
+  width: 12rpx;
+  height: 12rpx;
+  border-radius: 50%;
+  background: #52c41a;
+  margin-top: 8rpx;
+}
+
+.day-today {
+  position: absolute;
+  width: 48rpx;
+  height: 48rpx;
+  border-radius: 50%;
+  border: 3rpx solid #52c41a;
+}
+
+.goals-section {
+  background: #fff;
+  margin: 20rpx;
+  border-radius: 16rpx;
+  padding: 30rpx;
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24rpx;
+}
+
+.section-title {
+  font-size: 32rpx;
+  font-weight: 600;
+  color: #333;
+}
+
+.add-goal-btn {
+  display: flex;
+  align-items: center;
+  gap: 8rpx;
+}
+
+.add-icon {
+  font-size: 32rpx;
+  color: #52c41a;
+}
+
+.add-text {
+  font-size: 26rpx;
+  color: #52c41a;
+}
+
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 60rpx;
+}
+
+.empty-icon {
+  font-size: 60rpx;
+  margin-bottom: 20rpx;
+}
+
+.empty-text {
+  font-size: 28rpx;
+  color: #999;
+}
+
+.goal-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20rpx;
+}
+
+.goal-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 24rpx;
+  background: #fafafa;
+  border-radius: 12rpx;
+}
+
+.goal-info {
+  flex: 1;
+  margin-right: 20rpx;
+}
+
+.goal-title {
+  font-size: 30rpx;
+  font-weight: 600;
+  color: #333;
+  display: block;
+  margin-bottom: 8rpx;
+}
+
+.goal-desc {
+  font-size: 24rpx;
+  color: #999;
+  display: block;
+  margin-bottom: 16rpx;
+}
+
+.goal-progress {
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+}
+
+.progress-bar {
+  flex: 1;
+  height: 12rpx;
+  background: #e8e8e8;
+  border-radius: 6rpx;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #52c41a 0%, #3db916 100%);
+  border-radius: 6rpx;
+  transition: width 0.3s ease;
+}
+
+.progress-text {
+  font-size: 24rpx;
+  color: #666;
+  white-space: nowrap;
+}
+
+.goal-action {
+  flex-shrink: 0;
+}
+
+.action-btn {
+  background: linear-gradient(135deg, #52c41a 0%, #3db916 100%);
+  padding: 16rpx 32rpx;
+  border-radius: 20rpx;
+}
+
+.btn-text {
+  font-size: 26rpx;
+  color: #fff;
+}
+
+.completed-badge {
+  background: #f6ffed;
+  padding: 16rpx 32rpx;
+  border-radius: 20rpx;
+}
+
+.completed-badge .badge-text {
+  font-size: 26rpx;
+  color: #52c41a;
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  width: 80%;
+  background: #fff;
+  border-radius: 20rpx;
+  overflow: hidden;
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 30rpx;
+  border-bottom: 1rpx solid #f0f0f0;
+}
+
+.modal-title {
+  font-size: 32rpx;
+  font-weight: 600;
+  color: #333;
+}
+
+.close-btn {
+  width: 48rpx;
+  height: 48rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.close-icon {
+  font-size: 40rpx;
+  color: #999;
+}
+
+.modal-body {
+  padding: 30rpx;
+}
+
+.form-item {
+  margin-bottom: 24rpx;
+}
+
+.form-label {
+  font-size: 28rpx;
+  color: #666;
+  display: block;
+  margin-bottom: 12rpx;
+}
+
+.form-input {
+  width: 100%;
+  height: 80rpx;
+  background: #f5f5f5;
+  border-radius: 12rpx;
+  padding: 0 24rpx;
+  font-size: 28rpx;
+}
+
+.modal-footer {
+  display: flex;
+  border-top: 1rpx solid #f0f0f0;
+}
+
+.modal-btn {
+  flex: 1;
+  padding: 30rpx;
+  text-align: center;
+  font-size: 30rpx;
+  border: none;
+}
+
+.modal-btn.cancel {
+  color: #666;
+  background: #f5f5f5;
+}
+
+.modal-btn.confirm {
+  color: #fff;
+  background: linear-gradient(135deg, #52c41a 0%, #3db916 100%);
+}

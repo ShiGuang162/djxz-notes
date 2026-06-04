@@ -1,0 +1,150 @@
+<view class="container">
+  <view class="checkin-header">
+    <view class="header-bg"></view>
+    <view class="header-content">
+      <view class="checkin-stats">
+        <view class="stat-item">
+          <text class="stat-num">{{continuousDays}}</text>
+          <text class="stat-label">连续天数</text>
+        </view>
+        <view class="stat-divider"></view>
+        <view class="stat-item">
+          <text class="stat-num">{{totalDays}}</text>
+          <text class="stat-label">累计打卡</text>
+        </view>
+        <view class="stat-divider"></view>
+        <view class="stat-item">
+          <text class="stat-num">{{monthDays}}</text>
+          <text class="stat-label">本月打卡</text>
+        </view>
+      </view>
+      
+      <view class="checkin-btn" bindtap="doCheckin" wx:if="!hasCheckedIn">
+        <text class="checkin-icon">✓</text>
+        <text class="checkin-text">立即打卡</text>
+      </view>
+      <view class="checked-badge" wx:else>
+        <text class="badge-icon">🎉</text>
+        <text class="badge-text">今日已打卡</text>
+      </view>
+    </view>
+  </view>
+
+  <view class="calendar-section">
+    <view class="calendar-header">
+      <view class="month-nav" bindtap="prevMonth">
+        <text class="nav-icon">‹</text>
+      </view>
+      <text class="month-title">{{currentYear}}年{{currentMonth}}月</text>
+      <view class="month-nav" bindtap="nextMonth">
+        <text class="nav-icon">›</text>
+      </view>
+    </view>
+    
+    <view class="weekdays">
+      <text wx:for="weekdays" wx:key="index" class="weekday">{{item}}</text>
+    </view>
+    
+    <view class="calendar-grid">
+      <view 
+        wx:for="calendarDays" 
+        wx:key="date" 
+        class="day-cell"
+        data-date="{{item.date}}"
+        bindtap="selectDay"
+      >
+        <text class="day-num">{{item.day}}</text>
+        <view class="day-dot" wx:if="item.checked"></view>
+        <view class="day-today" wx:if="item.isToday"></view>
+      </view>
+    </view>
+  </view>
+
+  <view class="goals-section">
+    <view class="section-header">
+      <text class="section-title">我的目标</text>
+      <view class="add-goal-btn" bindtap="showAddGoalModal">
+        <text class="add-icon">+</text>
+        <text class="add-text">添加目标</text>
+      </view>
+    </view>
+    
+    <view wx:if="goalList.length === 0" class="empty-state">
+      <text class="empty-icon">🎯</text>
+      <text class="empty-text">还没有目标，设定一个吧</text>
+    </view>
+    
+    <view wx:else class="goal-list">
+      <view wx:for="goalList" wx:key="_id" class="goal-card">
+        <view class="goal-info">
+          <text class="goal-title">{{item.title}}</text>
+          <text class="goal-desc">{{item.description}}</text>
+          <view class="goal-progress">
+            <view class="progress-bar">
+              <view class="progress-fill" style="width: {{(item.completedDays / item.targetDays) * 100}}%"></view>
+            </view>
+            <text class="progress-text">{{item.completedDays}}/{{item.targetDays}}天</text>
+          </view>
+        </view>
+        <view class="goal-action">
+          <view 
+            class="action-btn" 
+            wx:if="item.status !== 'completed'"
+            bindtap="completeGoalDay"
+            data-id="{{item._id}}"
+          >
+            <text class="btn-text">打卡</text>
+          </view>
+          <view class="completed-badge" wx:else>
+            <text class="badge-text">已完成</text>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <view class="modal-overlay" wx:if="showGoalModal" bindtap="hideAddGoalModal">
+    <view class="modal-content" catchtap="stopPropagation">
+      <view class="modal-header">
+        <text class="modal-title">添加目标</text>
+        <view class="close-btn" bindtap="hideAddGoalModal">
+          <text class="close-icon">×</text>
+        </view>
+      </view>
+      <view class="modal-body">
+        <view class="form-item">
+          <text class="form-label">目标名称</text>
+          <input 
+            class="form-input" 
+            placeholder="请输入目标名称" 
+            value="{{newGoal.title}}"
+            bindinput="onGoalTitleInput"
+          />
+        </view>
+        <view class="form-item">
+          <text class="form-label">目标描述</text>
+          <input 
+            class="form-input" 
+            placeholder="请输入目标描述" 
+            value="{{newGoal.description}}"
+            bindinput="onGoalDescInput"
+          />
+        </view>
+        <view class="form-item">
+          <text class="form-label">目标天数</text>
+          <input 
+            class="form-input" 
+            placeholder="请输入目标天数" 
+            type="number"
+            value="{{newGoal.targetDays}}"
+            bindinput="onGoalDaysInput"
+          />
+        </view>
+      </view>
+      <view class="modal-footer">
+        <button class="modal-btn cancel" bindtap="hideAddGoalModal">取消</button>
+        <button class="modal-btn confirm" bindtap="addGoal">确认</button>
+      </view>
+    </view>
+  </view>
+</view>

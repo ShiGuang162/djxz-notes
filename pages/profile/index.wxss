@@ -1,0 +1,180 @@
+.container {
+  min-height: 100vh;
+  background: #f5f5f5;
+}
+
+.profile-header {
+  position: relative;
+  padding-bottom: 40rpx;
+}
+
+.header-bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 360rpx;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 0 0 40rpx 40rpx;
+}
+
+.header-content {
+  position: relative;
+  z-index: 1;
+  padding: 60rpx 30rpx 20rpx;
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+  margin-bottom: 30rpx;
+}
+
+.avatar-wrapper {
+  width: 120rpx;
+  height: 120rpx;
+  border-radius: 50%;
+  border: 4rpx solid #fff;
+  overflow: hidden;
+  margin-right: 24rpx;
+}
+
+.avatar {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.user-detail {
+  display: flex;
+  flex-direction: column;
+}
+
+.user-name {
+  font-size: 36rpx;
+  font-weight: 600;
+  color: #fff;
+  margin-bottom: 8rpx;
+}
+
+.user-desc {
+  font-size: 26rpx;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.stats-row {
+  display: flex;
+  justify-content: space-around;
+  background: #fff;
+  border-radius: 16rpx;
+  padding: 30rpx;
+  box-shadow: 0 4rpx 20rpx rgba(0, 0, 0, 0.08);
+}
+
+.stat-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.stat-num {
+  font-size: 40rpx;
+  font-weight: 700;
+  color: #333;
+}
+
+.stat-label {
+  font-size: 24rpx;
+  color: #999;
+  margin-top: 8rpx;
+}
+
+.menu-section {
+  padding: 20rpx;
+}
+
+.menu-group {
+  background: #fff;
+  border-radius: 16rpx;
+  margin-bottom: 20rpx;
+  overflow: hidden;
+}
+
+.menu-item {
+  display: flex;
+  align-items: center;
+  padding: 30rpx;
+  border-bottom: 1rpx solid #f0f0f0;
+}
+
+.menu-item:last-child {
+  border-bottom: none;
+}
+
+.menu-icon {
+  font-size: 40rpx;
+  margin-right: 20rpx;
+}
+
+.menu-text {
+  flex: 1;
+  font-size: 30rpx;
+  color: #333;
+}
+
+.menu-arrow {
+  font-size: 36rpx;
+  color: #ccc;
+}
+
+.motivation-section {
+  padding: 0 20rpx 20rpx;
+}
+
+.motivation-card {
+  display: flex;
+  align-items: flex-start;
+  background: linear-gradient(135deg, #fff9e6 0%, #fff5d6 100%);
+  border-radius: 16rpx;
+  padding: 24rpx;
+  border: 2rpx solid #ffe082;
+}
+
+.motivation-icon {
+  font-size: 48rpx;
+  margin-right: 20rpx;
+}
+
+.motivation-content {
+  flex: 1;
+}
+
+.motivation-title {
+  font-size: 26rpx;
+  color: #ff9800;
+  display: block;
+  margin-bottom: 8rpx;
+}
+
+.motivation-text {
+  font-size: 28rpx;
+  color: #333;
+  line-height: 1.6;
+}
+
+.footer {
+  text-align: center;
+  padding: 40rpx 20rpx;
+}
+
+.footer-text {
+  font-size: 24rpx;
+  color: #999;
+  display: block;
+  margin-bottom: 8rpx;
+}
+
+.footer-version {
+  font-size: 22rpx;
+  color: #ccc;
+}

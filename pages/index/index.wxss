@@ -1,0 +1,281 @@
+.container {
+  min-height: 100vh;
+  padding: 20rpx;
+  padding-bottom: 120rpx;
+}
+
+.header {
+  margin-bottom: 30rpx;
+}
+
+.greeting {
+  margin-bottom: 16rpx;
+}
+
+.greeting-text {
+  font-size: 36rpx;
+  font-weight: 600;
+  color: #333;
+}
+
+.checkin-status {
+  display: inline-block;
+}
+
+.checkin-badge {
+  display: flex;
+  align-items: center;
+  background: linear-gradient(135deg, #ff6b6b 0%, #ee5a5a 100%);
+  padding: 8rpx 20rpx;
+  border-radius: 20rpx;
+}
+
+.badge-icon {
+  font-size: 24rpx;
+  margin-right: 8rpx;
+}
+
+.badge-text {
+  font-size: 22rpx;
+  color: #fff;
+}
+
+.quick-actions {
+  display: flex;
+  gap: 20rpx;
+  margin-bottom: 30rpx;
+}
+
+.action-btn {
+  flex: 1;
+  background: #fff;
+  border-radius: 16rpx;
+  padding: 30rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-shadow: 0 2rpx 12rpx rgba(0, 0, 0, 0.06);
+}
+
+.action-icon-wrapper {
+  width: 80rpx;
+  height: 80rpx;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #52c41a 0%, #3db916 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 16rpx;
+}
+
+.action-icon-wrapper.checkin {
+  background: linear-gradient(135deg, #1890ff 0%, #096dd9 100%);
+}
+
+.action-icon {
+  font-size: 36rpx;
+}
+
+.action-text {
+  font-size: 26rpx;
+  color: #666;
+}
+
+.section {
+  margin-bottom: 30rpx;
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20rpx;
+}
+
+.section-title {
+  font-size: 32rpx;
+  font-weight: 600;
+  color: #333;
+}
+
+.section-more {
+  font-size: 26rpx;
+  color: #999;
+}
+
+.empty-state {
+  background: #fff;
+  border-radius: 16rpx;
+  padding: 60rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.empty-icon {
+  font-size: 60rpx;
+  margin-bottom: 20rpx;
+}
+
+.empty-text {
+  font-size: 28rpx;
+  color: #999;
+}
+
+.diary-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20rpx;
+}
+
+.diary-card {
+  background: #fff;
+  border-radius: 16rpx;
+  padding: 24rpx;
+  box-shadow: 0 2rpx 12rpx rgba(0, 0, 0, 0.06);
+}
+
+.card-content {
+  margin-bottom: 16rpx;
+}
+
+.card-text {
+  font-size: 28rpx;
+  color: #333;
+  line-height: 1.6;
+}
+
+.card-images {
+  display: flex;
+  gap: 12rpx;
+  margin-bottom: 16rpx;
+}
+
+.card-img {
+  width: 180rpx;
+  height: 180rpx;
+  border-radius: 12rpx;
+}
+
+.more-images {
+  width: 180rpx;
+  height: 180rpx;
+  border-radius: 12rpx;
+  background: #f5f5f5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.more-text {
+  font-size: 28rpx;
+  color: #999;
+}
+
+.card-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 16rpx;
+  border-top: 1rpx solid #f0f0f0;
+}
+
+.card-time {
+  font-size: 24rpx;
+  color: #999;
+}
+
+.card-stats {
+  display: flex;
+  gap: 20rpx;
+}
+
+.stat-item {
+  font-size: 24rpx;
+  color: #999;
+}
+
+.goal-scroll {
+  white-space: nowrap;
+}
+
+.goal-list {
+  display: inline-flex;
+  gap: 20rpx;
+}
+
+.goal-card {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  background: #fff;
+  border-radius: 16rpx;
+  padding: 24rpx;
+  width: 200rpx;
+  box-shadow: 0 2rpx 12rpx rgba(0, 0, 0, 0.06);
+}
+
+.goal-progress-ring {
+  position: relative;
+  width: 120rpx;
+  height: 120rpx;
+  margin-bottom: 16rpx;
+}
+
+.ring-bg {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  border: 8rpx solid #f0f0f0;
+}
+
+.ring-progress {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  border: 8rpx solid transparent;
+  border-top-color: #52c41a;
+  border-right-color: #52c41a;
+  transform: rotate(calc(var(--progress) * 3.6deg - 90deg));
+  transition: transform 0.3s ease;
+}
+
+.ring-inner {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  align-items: baseline;
+}
+
+.progress-num {
+  font-size: 32rpx;
+  font-weight: 600;
+  color: #52c41a;
+}
+
+.progress-total {
+  font-size: 20rpx;
+  color: #999;
+}
+
+.goal-title {
+  font-size: 26rpx;
+  color: #333;
+  text-align: center;
+  margin-bottom: 8rpx;
+}
+
+.goal-status {
+  background: #f6ffed;
+  padding: 4rpx 16rpx;
+  border-radius: 12rpx;
+}
+
+.status-text {
+  font-size: 20rpx;
+  color: #52c41a;
+}

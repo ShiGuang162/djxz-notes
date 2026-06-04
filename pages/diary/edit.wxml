@@ -1,0 +1,48 @@
+<view class="container">
+  <view class="form">
+    <view class="input-section">
+      <textarea 
+        class="content-input" 
+        placeholder="写下今天的心情和故事..." 
+        value="{{content}}"
+        bindinput="onContentInput"
+        maxlength="2000"
+      />
+      <view class="word-count">
+        <text class="count-text">{{content.length}}/2000</text>
+      </view>
+    </view>
+
+    <view class="image-section">
+      <view class="section-title">
+        <text class="title-text">添加图片</text>
+        <text class="title-hint">最多添加9张</text>
+      </view>
+      <view class="image-grid">
+        <view 
+          wx:for="images" 
+          wx:key="index" 
+          class="image-item"
+        >
+          <image class="preview-img" src="{{item}}" mode="aspectFill" />
+          <view class="delete-btn" bindtap="deleteImage" data-index="{{index}}">
+            <text class="delete-icon">×</text>
+          </view>
+        </view>
+        <view 
+          wx:if="images.length < 9" 
+          class="image-item add-btn"
+          bindtap="chooseImage"
+        >
+          <text class="add-icon">+</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <view class="submit-area">
+    <button class="submit-btn" bindtap="submitDiary" disabled="{{!content.trim()}}">
+      <text class="btn-text">保存日记</text>
+    </button>
+  </view>
+</view>

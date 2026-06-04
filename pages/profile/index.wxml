@@ -1,0 +1,74 @@
+<view class="container">
+  <view class="profile-header">
+    <view class="header-bg"></view>
+    <view class="header-content">
+      <view class="user-info">
+        <view class="avatar-wrapper">
+          <image class="avatar" src="{{userInfo.avatarUrl}}" mode="aspectFill" />
+        </view>
+        <view class="user-detail">
+          <text class="user-name">{{userInfo.nickName}}</text>
+          <text class="user-desc">记录生活，分享美好</text>
+        </view>
+      </view>
+      
+      <view class="stats-row">
+        <view class="stat-card">
+          <text class="stat-num">{{diaryCount}}</text>
+          <text class="stat-label">日记</text>
+        </view>
+        <view class="stat-card">
+          <text class="stat-num">{{checkinCount}}</text>
+          <text class="stat-label">打卡</text>
+        </view>
+        <view class="stat-card">
+          <text class="stat-num">{{goalCount}}</text>
+          <text class="stat-label">目标</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <view class="menu-section">
+    <view class="menu-group">
+      <view class="menu-item" bindtap="goToDiaryList">
+        <view class="menu-icon">📝</view>
+        <text class="menu-text">我的日记</text>
+        <text class="menu-arrow">›</text>
+      </view>
+      <view class="menu-item" bindtap="goToArchive">
+        <view class="menu-icon">📚</view>
+        <text class="menu-text">归档</text>
+        <text class="menu-arrow">›</text>
+      </view>
+    </view>
+    
+    <view class="menu-group">
+      <view class="menu-item" bindtap="goToSettings">
+        <view class="menu-icon">⚙️</view>
+        <text class="menu-text">设置</text>
+        <text class="menu-arrow">›</text>
+      </view>
+      <view class="menu-item" bindtap="goToAbout">
+        <view class="menu-icon">ℹ️</view>
+        <text class="menu-text">关于我们</text>
+        <text class="menu-arrow">›</text>
+      </view>
+    </view>
+  </view>
+
+  <view class="motivation-section">
+    <view class="motivation-card">
+      <text class="motivation-icon">💪</text>
+      <view class="motivation-content">
+        <text class="motivation-title">{{motivation.title}}</text>
+        <text class="motivation-text">{{motivation.text}}</text>
+      </view>
+    </view>
+  </view>
+
+  <view class="footer">
+    <text class="footer-text">© 2024 我的博客 - 记录生活每一天</text>
+    <text class="footer-version">Version 1.0.0</text>
+  </view>
+</view>
