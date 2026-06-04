@@ -1,14 +1,5 @@
 App({
   onLaunch: function () {
-    if (!wx.cloud) {
-      console.error('请使用 2.2.3 或以上的基础库以使用云能力')
-    } else {
-      wx.cloud.init({
-        env: 'your-env-id',
-        traceUser: true,
-      })
-    }
-
     this.globalData = {}
   },
 
@@ -29,7 +20,11 @@ App({
             resolve(res.userInfo)
           },
           fail: (err) => {
-            reject(err)
+            console.log('用户未授权，使用默认用户信息')
+            resolve({
+              nickName: '用户',
+              avatarUrl: ''
+            })
           }
         })
       }
@@ -37,20 +32,12 @@ App({
   },
 
   getOpenid: function() {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       if (this.globalData.openid) {
         resolve(this.globalData.openid)
       } else {
-        wx.cloud.callFunction({
-          name: 'login',
-          success: (res) => {
-            this.globalData.openid = res.result.openid
-            resolve(res.result.openid)
-          },
-          fail: (err) => {
-            reject(err)
-          }
-        })
+        this.globalData.openid = 'mock_openid'
+        resolve('mock_openid')
       }
     })
   }

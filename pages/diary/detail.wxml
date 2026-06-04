@@ -51,7 +51,7 @@
   <view class="action-bar">
     <view class="action-item" bindtap="handleLike">
       <text class="action-icon {{liked ? 'liked' : ''}}">❤️</text>
-      <text class="action-text">{{diary?.likes || 0}}</text>
+      <text class="action-text">{{diary && diary.likes || 0}}</text>
     </view>
     <view class="action-item" bindtap="focusComment">
       <text class="action-icon">💬</text>
