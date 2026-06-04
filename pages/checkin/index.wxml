@@ -42,20 +42,20 @@
     </view>
     
     <view class="weekdays">
-      <text wx:for="weekdays" wx:key="index" class="weekday">{{item}}</text>
+      <text wx:for="{{weekdays}}" wx:key="index" class="weekday">{{item}}</text>
     </view>
     
     <view class="calendar-grid">
       <view 
-        wx:for="calendarDays" 
+        wx:for="{{calendarDays}}" 
         wx:key="date" 
         class="day-cell"
         data-date="{{item.date}}"
         bindtap="selectDay"
       >
         <text class="day-num">{{item.day}}</text>
-        <view class="day-dot" wx:if="item.checked"></view>
-        <view class="day-today" wx:if="item.isToday"></view>
+        <view class="day-dot" wx:if="{{item.checked}}"></view>
+        <view class="day-today" wx:if="{{item.isToday}}"></view>
       </view>
     </view>
   </view>
@@ -103,12 +103,12 @@
     </view>
   </view>
 
-  <view class="modal-overlay" wx:if="showGoalModal" bindtap="hideAddGoalModal">
+  <view class="modal-overlay" wx:if="{{showGoalModal}}" bindtap="hideAddGoalModal">
     <view class="modal-content" catchtap="stopPropagation">
       <view class="modal-header">
         <text class="modal-title">添加目标</text>
-        <view class="close-btn" bindtap="hideAddGoalModal">
-          <text class="close-icon">×</text>
+        <view class="close-btn" catchtap="handleCloseModal">
+          <text class="close-icon">✕</text>
         </view>
       </view>
       <view class="modal-body">

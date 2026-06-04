@@ -4,9 +4,9 @@
       <text class="content-text">{{diary.content}}</text>
     </view>
     
-    <view class="diary-images" wx:if="diary.images && diary.images.length > 0">
+    <view class="diary-images" wx:if="{{diary.images && diary.images.length > 0}}">
       <image 
-        wx:for="diary.images" 
+        wx:for="{{diary.images}}" 
         wx:key="index" 
         class="detail-img" 
         src="{{item}}" 
@@ -28,12 +28,12 @@
       <text class="section-title">评论 ({{commentList.length}})</text>
     </view>
     
-    <view wx:if="commentList.length === 0" class="empty-state">
+    <view wx:if="{{commentList.length === 0}}" class="empty-state">
       <text class="empty-text">还没有评论，来说两句吧</text>
     </view>
     
     <view wx:else class="comment-list">
-      <view wx:for="commentList" wx:key="_id" class="comment-item">
+      <view wx:for="{{commentList}}" wx:key="_id" class="comment-item">
         <view class="comment-avatar">
           <text class="avatar-icon">👤</text>
         </view>

@@ -7,6 +7,10 @@ Page({
     images: []
   },
 
+  goBack() {
+    wx.navigateBack()
+  },
+
   onContentInput(e) {
     this.setData({
       content: e.detail.value
@@ -64,12 +68,17 @@ Page({
 
     try {
       const openid = await App.getOpenid()
+      console.log('保存日记，userId:', openid)
+      console.log('日记内容:', this.data.content)
+      console.log('图片数量:', this.data.images.length)
       
-      await diary.add({
+      const result = await diary.add({
         userId: openid,
         content: this.data.content,
         images: this.data.images
       })
+      
+      console.log('保存结果:', result)
 
       wx.hideLoading()
       wx.showToast({
@@ -79,7 +88,7 @@ Page({
 
       setTimeout(() => {
         wx.navigateBack()
-      }, 1500)
+      }, 1000)
     } catch (error) {
       wx.hideLoading()
       console.error('保存日记失败:', error)

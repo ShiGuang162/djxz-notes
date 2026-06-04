@@ -27,8 +27,10 @@ Page({
   },
 
   onShow() {
-    this.loadData()
-    this.generateCalendar()
+    if (!this.data.showGoalModal) {
+      this.loadData()
+      this.generateCalendar()
+    }
   },
 
   async loadData() {
@@ -164,6 +166,11 @@ Page({
       showGoalModal: false,
       newGoal: { title: '', description: '', targetDays: '' }
     })
+  },
+
+  handleCloseModal() {
+    console.log('handleCloseModal called')
+    this.hideAddGoalModal()
   },
 
   stopPropagation() {},

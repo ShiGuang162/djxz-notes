@@ -55,6 +55,7 @@ Page({
   async loadData() {
     try {
       const openid = await App.getOpenid()
+      console.log('首页加载数据，userId:', openid)
       
       const [diaries, goals, days] = await Promise.all([
         diary.getAll(openid),
@@ -62,8 +63,27 @@ Page({
         checkin.getContinuousDays(openid)
       ])
       
+      console.log('加载的日记列表:', diaries)
+      console.log('日记数量:', diaries.length)
+      
+      // 预处理日记数据，格式化日期
+      const formattedDiaries = diaries.map(diary => {
+        const date = new Date(diary.createTime)
+        const year = date.getFullYear()
+        const month = (date.getMonth() + 1).toString().padStart(2, '0')
+        const day = date.getDate().toString().padStart(2, '0')
+        const hour = date.getHours().toString().padStart(2, '0')
+        const minute = date.getMinutes().toString().padStart(2, '0')
+        return {
+          ...diary,
+          formattedTime: `${year}-${month}-${day} ${hour}:${minute}`
+        }
+      })
+      
+      console.log('格式化后的日记:', formattedDiaries)
+      
       this.setData({
-        diaryList: diaries,
+        diaryList: formattedDiaries,
         goalList: goals.slice(0, 5),
         continuousDays: days
       })
@@ -75,6 +95,13 @@ Page({
   goToWrite() {
     wx.navigateTo({
       url: '/pages/diary/edit'
+    })
+  },
+
+  viewAllDiaries() {
+    wx.showToast({
+      title: '日记列表功能开发中',
+      icon: 'none'
     })
   },
 
@@ -106,6 +133,19 @@ Page({
   },
 
   formatDate(date) {
-    return formatDate(new Date(date))
+    console.log('formatDate 接收到的日期:', date)
+    if (!date) return '未知日期'
+    const dateObj = new Date(date)
+    console.log('格式化后的日期对象:', dateObj)
+    const year = dateObj.getFullYear()
+    const month = dateObj.getMonth() + 1
+    const day = dateObj.getDate()
+    const hour = dateObj.getHours()
+    const minute = dateObj.getMinutes()
+    
+    const formatNumber = n => n.toString().padStart(2, '0')
+    const result = `${year}-${formatNumber(month)}-${formatNumber(day)} ${formatNumber(hour)}:${formatNumber(minute)}`
+    console.log('格式化结果:', result)
+    return result
   }
 })

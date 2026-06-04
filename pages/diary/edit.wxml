@@ -1,5 +1,15 @@
 <view class="container">
-  <view class="form">
+  <view class="editor-header">
+    <view class="back-btn" bindtap="goBack">
+      <text class="back-icon">←</text>
+    </view>
+    <text class="header-title">写日记</text>
+    <view class="save-btn" bindtap="submitDiary">
+      <text class="save-text">保存</text>
+    </view>
+  </view>
+
+  <view class="editor-body">
     <view class="input-section">
       <textarea 
         class="content-input" 
@@ -7,7 +17,8 @@
         value="{{content}}"
         bindinput="onContentInput"
         maxlength="2000"
-      />
+        auto-height
+      ></textarea>
       <view class="word-count">
         <text class="count-text">{{content.length}}/2000</text>
       </view>
@@ -18,20 +29,20 @@
         <text class="title-text">添加图片</text>
         <text class="title-hint">最多添加9张</text>
       </view>
-      <view class="image-grid">
+      <view class="image-list">
         <view 
-          wx:for="images" 
+          wx:for="{{images}}" 
           wx:key="index" 
-          class="image-item"
+          class="image-item preview"
         >
           <image class="preview-img" src="{{item}}" mode="aspectFill" />
-          <view class="delete-btn" bindtap="deleteImage" data-index="{{index}}">
+          <view class="delete-btn" catchtap="deleteImage" data-index="{{index}}">
             <text class="delete-icon">×</text>
           </view>
         </view>
         <view 
-          wx:if="images.length < 9" 
-          class="image-item add-btn"
+          wx:if="{{images.length < 9}}" 
+          class="image-item add"
           bindtap="chooseImage"
         >
           <text class="add-icon">+</text>
@@ -40,9 +51,11 @@
     </view>
   </view>
 
-  <view class="submit-area">
-    <button class="submit-btn" bindtap="submitDiary" disabled="{{!content.trim()}}">
-      <text class="btn-text">保存日记</text>
-    </button>
+  <view class="footer-actions">
+    <view class="action-row">
+      <button class="action-btn primary" bindtap="submitDiary" disabled="{{!content.trim()}}">
+        <text class="btn-text">保存日记</text>
+      </button>
+    </view>
   </view>
 </view>

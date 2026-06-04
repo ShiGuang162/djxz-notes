@@ -29,41 +29,43 @@
   <view class="section">
     <view class="section-header">
       <text class="section-title">我的日记</text>
-      <text class="section-more">查看全部</text>
+      <text class="section-more" bindtap="viewAllDiaries">查看全部</text>
     </view>
     
-    <view wx:if="diaryList.length === 0" class="empty-state">
+    <view wx:if="{{diaryList.length === 0}}" class="empty-state">
       <text class="empty-icon">📝</text>
       <text class="empty-text">还没有日记，写一篇吧</text>
     </view>
     
     <view wx:else class="diary-list">
       <view 
-        wx:for="diaryList" 
+        wx:for="{{diaryList}}" 
         wx:key="_id" 
         class="diary-card" 
         bindtap="goToDetail"
         data-id="{{item._id}}"
       >
+        <view class="card-header">
+          <text class="card-time">{{item.formattedTime}}</text>
+        </view>
         <view class="card-content">
           <text class="card-text multiline">{{item.content}}</text>
         </view>
-        <view class="card-images" wx:if="item.images && item.images.length > 0">
+        <view class="card-images" wx:if="{{item.images && item.images.length > 0}}">
           <image 
-            wx:for="item.images" 
+            wx:for="{{item.images}}" 
             wx:key="index" 
             wx:for-index="imgIndex"
-            wx:if="imgIndex < 3"
+            wx:if="{{imgIndex < 3}}"
             class="card-img" 
             src="{{item}}" 
             mode="aspectFill"
           />
-          <view wx:if="item.images.length > 3" class="more-images">
+          <view wx:if="{{item.images.length > 3}}" class="more-images">
             <text class="more-text">+{{item.images.length - 3}}</text>
           </view>
         </view>
         <view class="card-footer">
-          <text class="card-time">{{formatDate(item.createTime)}}</text>
           <view class="card-stats">
             <text class="stat-item">❤️ {{item.likes}}</text>
             <text class="stat-item">💬 {{item.commentCount || 0}}</text>
@@ -87,7 +89,7 @@
     <scroll-view wx:else class="goal-scroll" scroll-x>
       <view class="goal-list">
         <view 
-          wx:for="goalList" 
+          wx:for="{{goalList}}" 
           wx:key="_id" 
           class="goal-card"
           bindtap="goToGoalDetail"
