@@ -184,7 +184,17 @@
   transition: all 0.3s ease;
 }
 
+.action-icon-img {
+  width: 40rpx;
+  height: 40rpx;
+  transition: all 0.3s ease;
+}
+
 .action-icon.liked {
+  animation: bounce 0.4s ease;
+}
+
+.action-icon-img.liked {
   animation: bounce 0.4s ease;
 }
 

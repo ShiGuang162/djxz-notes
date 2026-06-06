@@ -72,7 +72,6 @@
     }
   },
   "miniprogramRoot": "./",
-  "cloudfunctionRoot": "cloudfunctions/",
   "simulatorPluginLibVersion": {},
   "editorSetting": {}
 }

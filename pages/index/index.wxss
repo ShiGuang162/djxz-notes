@@ -165,6 +165,12 @@ page {
   filter: drop-shadow(0 2rpx 4rpx rgba(0, 0, 0, 0.1));
 }
 
+.action-icon-img {
+  width: 56rpx;
+  height: 56rpx;
+  filter: drop-shadow(0 2rpx 4rpx rgba(0, 0, 0, 0.1));
+}
+
 .action-text {
   font-size: 28rpx;
   color: #5D6D7E;
@@ -361,6 +367,12 @@ page {
   color: #95A5A6;
   font-weight: 500;
   transition: all 0.2s ease;
+}
+
+.stat-icon {
+  width: 28rpx;
+  height: 28rpx;
+  margin-right: 6rpx;
 }
 
 .stat-item:active {

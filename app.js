@@ -13,20 +13,13 @@ App({
       if (this.globalData.userInfo) {
         resolve(this.globalData.userInfo)
       } else {
-        wx.getUserProfile({
-          desc: '用于完善会员资料',
-          success: (res) => {
-            this.globalData.userInfo = res.userInfo
-            resolve(res.userInfo)
-          },
-          fail: (err) => {
-            console.log('用户未授权，使用默认用户信息')
-            resolve({
-              nickName: '用户',
-              avatarUrl: ''
-            })
-          }
-        })
+        // wx.getUserProfile 已废弃，使用默认用户信息
+        const defaultUserInfo = {
+          nickName: '用户',
+          avatarUrl: ''
+        }
+        this.globalData.userInfo = defaultUserInfo
+        resolve(defaultUserInfo)
       }
     })
   },

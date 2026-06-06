@@ -36,7 +36,7 @@
     </view>
     <view class="action-btn" bindtap="goToCheckin">
       <view class="action-icon-wrapper checkin">
-        <text class="action-icon">✅</text>
+        <image class="action-icon-img" src="/images/打卡 (1).png" mode="aspectFit"/>
       </view>
       <text class="action-text">今日打卡</text>
     </view>
@@ -79,8 +79,8 @@
         </view>
         <view class="card-footer">
           <view class="card-stats">
-            <text class="stat-item">❤️ {{item.likes}}</text>
-            <text class="stat-item">💬 {{item.commentCount || 0}}</text>
+            <view class="stat-item"><image class="stat-icon" src="/images/点赞.png" mode="aspectFit"/> {{item.likes}}</view>
+            <view class="stat-item"><image class="stat-icon" src="/images/评论.png" mode="aspectFit"/> {{item.commentCount || 0}}</view>
           </view>
         </view>
       </view>

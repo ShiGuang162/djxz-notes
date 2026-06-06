@@ -50,11 +50,11 @@
 
   <view class="action-bar">
     <view class="action-item" bindtap="handleLike">
-      <text class="action-icon {{liked ? 'liked' : ''}}">❤️</text>
+      <image class="action-icon-img {{liked ? 'liked' : ''}}" src="/images/点赞.png" mode="aspectFit"/>
       <text class="action-text">{{diary.likes || 0}}</text>
     </view>
     <view class="action-item" bindtap="focusComment">
-      <text class="action-icon">💬</text>
+      <image class="action-icon-img" src="/images/评论.png" mode="aspectFit"/>
       <text class="action-text">{{formattedComments.length}}</text>
     </view>
     <view class="action-item" bindtap="handleShare">
