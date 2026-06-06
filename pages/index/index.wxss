@@ -237,6 +237,13 @@ page {
   opacity: 0.6;
 }
 
+.empty-icon-img {
+  width: 120rpx;
+  height: 120rpx;
+  margin-bottom: 24rpx;
+  opacity: 0.8;
+}
+
 .empty-text {
   font-size: 28rpx;
   color: #95A5A6;
@@ -298,16 +305,23 @@ page {
   margin-bottom: 24rpx;
 }
 
-.card-img {
+.card-img-wrapper {
   width: calc((100% - 32rpx) / 3);
   aspect-ratio: 1;
   border-radius: 16rpx;
-  object-fit: cover;
+  overflow: hidden;
   box-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.08);
-  transition: all 0.2s ease;
+  position: relative;
 }
 
-.card-img:active {
+.card-img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  transition: all 0.3s ease;
+}
+
+.card-img-wrapper:active {
   transform: scale(0.95);
 }
 

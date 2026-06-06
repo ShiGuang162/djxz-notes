@@ -1,74 +1,124 @@
 <view class="container">
+  <!-- 头部区域：渐变背景 + 浮动装饰 -->
   <view class="profile-header">
     <view class="header-bg"></view>
+    <view class="header-decoration-1"></view>
+    <view class="header-decoration-2"></view>
+
     <view class="header-content">
-      <view class="user-info">
-        <view class="avatar-wrapper">
-          <image class="avatar" src="{{userInfo.avatarUrl}}" mode="aspectFill" />
+      <view class="user-section">
+        <view class="avatar-ring">
+          <image class="avatar" src="{{userInfo.avatarUrl || '/images/profile.png'}}" mode="aspectFill" />
         </view>
-        <view class="user-detail">
-          <text class="user-name">{{userInfo.nickName}}</text>
-          <text class="user-desc">记录生活，分享美好</text>
+        <view class="user-info-block">
+          <text class="user-name">{{userInfo.nickName || '记录者'}}</text>
+          <view class="user-badge">
+            <text class="badge-dot"></text>
+            <text class="badge-text">记录生活，分享美好</text>
+          </view>
         </view>
       </view>
-      
-      <view class="stats-row">
-        <view class="stat-card">
+
+      <!-- 数据统计卡片 -->
+      <view class="stats-card">
+        <view class="stat-item">
           <text class="stat-num">{{diaryCount}}</text>
           <text class="stat-label">日记</text>
+          <view class="stat-bar diary-bar"></view>
         </view>
-        <view class="stat-card">
+        <view class="stat-divider"></view>
+        <view class="stat-item">
           <text class="stat-num">{{checkinCount}}</text>
           <text class="stat-label">打卡</text>
+          <view class="stat-bar checkin-bar"></view>
         </view>
-        <view class="stat-card">
+        <view class="stat-divider"></view>
+        <view class="stat-item">
           <text class="stat-num">{{goalCount}}</text>
           <text class="stat-label">目标</text>
+          <view class="stat-bar goal-bar"></view>
         </view>
       </view>
     </view>
   </view>
 
+  <!-- 功能菜单区 -->
   <view class="menu-section">
-    <view class="menu-group">
+    <view class="section-title-wrap">
+      <view class="title-bar"></view>
+      <text class="section-title-text">我的功能</text>
+    </view>
+
+    <view class="menu-card">
       <view class="menu-item" bindtap="goToDiaryList">
-        <view class="menu-icon">📝</view>
-        <text class="menu-text">我的日记</text>
+        <view class="menu-icon-wrap purple">
+          <text class="menu-icon">📝</text>
+        </view>
+        <view class="menu-content">
+          <text class="menu-text">我的日记</text>
+          <text class="menu-desc">查看所有日记</text>
+        </view>
         <text class="menu-arrow">›</text>
       </view>
+
+      <view class="menu-line"></view>
+
       <view class="menu-item" bindtap="goToArchive">
-        <view class="menu-icon">📚</view>
-        <text class="menu-text">归档</text>
+        <view class="menu-icon-wrap pink">
+          <text class="menu-icon">📚</text>
+        </view>
+        <view class="menu-content">
+          <text class="menu-text">归档</text>
+          <text class="menu-desc">已归档内容</text>
+        </view>
         <text class="menu-arrow">›</text>
       </view>
-    </view>
-    
-    <view class="menu-group">
+
+      <view class="menu-line"></view>
+
       <view class="menu-item" bindtap="goToSettings">
-        <view class="menu-icon">⚙️</view>
-        <text class="menu-text">设置</text>
+        <view class="menu-icon-wrap blue">
+          <text class="menu-icon">⚙️</text>
+        </view>
+        <view class="menu-content">
+          <text class="menu-text">设置</text>
+          <text class="menu-desc">个性化配置</text>
+        </view>
         <text class="menu-arrow">›</text>
       </view>
+
+      <view class="menu-line"></view>
+
       <view class="menu-item" bindtap="goToAbout">
-        <view class="menu-icon">ℹ️</view>
-        <text class="menu-text">关于我们</text>
+        <view class="menu-icon-wrap green">
+          <text class="menu-icon">ℹ️</text>
+        </view>
+        <view class="menu-content">
+          <text class="menu-text">关于我们</text>
+          <text class="menu-desc">了解更多信息</text>
+        </view>
         <text class="menu-arrow">›</text>
       </view>
     </view>
   </view>
 
+  <!-- 每日寄语 -->
   <view class="motivation-section">
-    <view class="motivation-card">
-      <text class="motivation-icon">💪</text>
-      <view class="motivation-content">
-        <text class="motivation-title">{{motivation.title}}</text>
-        <text class="motivation-text">{{motivation.text}}</text>
+    <view class="quote-card">
+      <view class="quote-decoration"></view>
+      <text class="quote-mark">"</text>
+      <text class="quote-text">{{motivation.text}}</text>
+      <view class="quote-footer">
+        <view class="quote-line"></view>
+        <text class="quote-title">— {{motivation.title}}</text>
       </view>
     </view>
   </view>
 
+  <!-- 页脚 -->
   <view class="footer">
-    <text class="footer-text">© 2024 我的博客 - 记录生活每一天</text>
+    <view class="footer-logo">📖</view>
+    <text class="footer-text">我的博客 · 记录生活每一天</text>
     <text class="footer-version">Version 1.0.0</text>
   </view>
 </view>

@@ -244,13 +244,21 @@ Page({
     })
 
     try {
-      await goal.completeDay(goalId)
+      const today = formatDate(new Date())
+      const result = await goal.checkIn(goalId, today)
       
       wx.hideLoading()
-      wx.showToast({
-        title: '打卡成功',
-        icon: 'success'
-      })
+      if (result.success) {
+        wx.showToast({
+          title: '打卡成功',
+          icon: 'success'
+        })
+      } else {
+        wx.showToast({
+          title: result.message || '打卡失败',
+          icon: 'none'
+        })
+      }
 
       await this.loadData()
     } catch (error) {
@@ -261,5 +269,12 @@ Page({
         icon: 'none'
       })
     }
+  },
+
+  goToGoalDetail(e) {
+    const id = e.currentTarget.dataset.id
+    wx.navigateTo({
+      url: `/pages/goal/detail?id=${id}`
+    })
   }
 })

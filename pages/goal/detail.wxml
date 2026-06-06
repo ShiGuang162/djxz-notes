@@ -1,0 +1,169 @@
+<view class="container" wx:if="{{hasLoaded}}">
+  <view class="goal-header">
+    <view class="header-bg"></view>
+    <view class="header-content">
+      <view class="goal-top-bar">
+        <view class="back-btn" bindtap="goBack">
+          <text class="back-icon">←</text>
+        </view>
+        <view class="header-actions">
+          <view class="action-icon-btn" bindtap="showEditModal">
+            <text>✎</text>
+          </view>
+          <view class="action-icon-btn delete" bindtap="deleteGoal">
+            <text>🗑</text>
+          </view>
+        </view>
+      </view>
+
+      <view class="goal-title-section">
+        <text class="goal-title">{{goal.title}}</text>
+        <text class="goal-desc" wx:if="{{goal.description}}">{{goal.description}}</text>
+        <view class="goal-status-tag" wx:if="{{goal.status === 'completed'}}">
+          <text class="status-emoji">🏆</text>
+          <text class="status-text">已达成</text>
+        </view>
+        <view class="goal-status-tag active" wx:else>
+          <text class="status-emoji">🔥</text>
+          <text class="status-text">进行中</text>
+        </view>
+      </view>
+
+      <view class="progress-section">
+        <view class="ring-container">
+          <view class="ring-bg-circle"></view>
+          <view class="ring-progress-circle" style="transform: rotate({{progress * 3.6 - 90}}deg);"></view>
+          <view class="ring-inner-content">
+            <text class="progress-percent">{{progress}}%</text>
+            <text class="progress-info">{{goal.completedDays}}/{{goal.targetDays}} 天</text>
+          </view>
+        </view>
+
+        <view class="progress-stats">
+          <view class="stat-block">
+            <text class="stat-value">{{goal.completedDays}}</text>
+            <text class="stat-label">已完成</text>
+          </view>
+          <view class="stat-block">
+            <text class="stat-value">{{goal.targetDays - goal.completedDays}}</text>
+            <text class="stat-label">还需天数</text>
+          </view>
+          <view class="stat-block">
+            <text class="stat-value">{{goal.targetDays}}</text>
+            <text class="stat-label">总目标</text>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <view class="main-checkin-section">
+    <view wx:if="{{goal.status === 'completed'}}" class="complete-card">
+      <text class="complete-emoji">🎊</text>
+      <text class="complete-title">恭喜你达成目标！</text>
+      <text class="complete-desc">坚持了 {{goal.targetDays}} 天，你真的很棒！</text>
+    </view>
+    <view wx:elif="{{isCheckedToday}}" class="checked-card">
+      <view class="checked-icon-bg">
+        <text class="checked-icon">✓</text>
+      </view>
+      <view class="checked-info">
+        <text class="checked-title">今日已打卡</text>
+        <text class="checked-desc">保持这份坚持，明天继续！</text>
+      </view>
+    </view>
+    <view wx:else class="checkin-btn-card" bindtap="doCheckIn">
+      <view class="btn-gradient"></view>
+      <view class="btn-content">
+        <text class="btn-check-icon">✓</text>
+        <text class="btn-title">立即打卡</text>
+        <text class="btn-desc">记录今天的努力</text>
+      </view>
+    </view>
+  </view>
+
+  <view class="quick-actions">
+    <view class="action-card" bindtap="goWriteDiary">
+      <text class="action-emoji">📝</text>
+      <text class="action-title">写日记</text>
+      <text class="action-desc">记录今日心情</text>
+    </view>
+    <view class="action-card stat">
+      <text class="action-emoji">📚</text>
+      <text class="action-title">日记总数</text>
+      <text class="action-value">{{totalDiaries}} 篇</text>
+    </view>
+  </view>
+
+  <view class="section">
+    <view class="section-header">
+      <text class="section-title">最近打卡记录</text>
+      <text class="section-more">共 {{goal.completedDays}} 次</text>
+    </view>
+
+    <view wx:if="{{recentCheckins.length === 0}}" class="empty-checkins">
+      <text class="empty-emoji">📅</text>
+      <text class="empty-text">还没有打卡记录，开始你的第一天打卡吧</text>
+    </view>
+
+    <view wx:else class="checkin-list">
+      <view wx:for="{{recentCheckins}}" wx:key="date" class="checkin-item">
+        <view class="checkin-date">
+          <text class="date-cn">{{item.dateCN}}</text>
+          <text class="weekday">{{item.weekday}}</text>
+        </view>
+        <view class="checkin-status-badge done">
+          <text class="status-icon">✓</text>
+          <text class="status-label">已完成</text>
+        </view>
+        <view class="undo-btn" bindtap="undoCheckIn" data-date="{{item.date}}" wx:if="{{goal.status !== 'completed'}}">
+          <text>撤销</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <view class="section" wx:if="{{allCheckinDates.length > 7}}">
+    <view class="section-header">
+      <text class="section-title">全部打卡日期</text>
+    </view>
+    <view class="all-dates-grid">
+      <view wx:for="{{allCheckinDates}}" wx:key="*this" class="date-chip">
+        <text>{{item}}</text>
+      </view>
+    </view>
+  </view>
+
+  <view class="modal-overlay" wx:if="{{showEditModal}}" bindtap="hideEditModal">
+    <view class="modal-content" catchtap="stopPropagation">
+      <view class="modal-header">
+        <text class="modal-title">编辑目标</text>
+        <view class="close-btn" catchtap="hideEditModal">
+          <text class="close-icon">✕</text>
+        </view>
+      </view>
+      <view class="modal-body">
+        <view class="form-item">
+          <text class="form-label">目标名称</text>
+          <input class="form-input" placeholder="请输入目标名称" value="{{editGoal.title}}" bindinput="onEditTitleInput" />
+        </view>
+        <view class="form-item">
+          <text class="form-label">目标描述</text>
+          <input class="form-input" placeholder="请输入目标描述" value="{{editGoal.description}}" bindinput="onEditDescInput" />
+        </view>
+        <view class="form-item">
+          <text class="form-label">目标天数</text>
+          <input class="form-input" placeholder="请输入目标天数" type="number" value="{{editGoal.targetDays}}" bindinput="onEditDaysInput" />
+        </view>
+      </view>
+      <view class="modal-footer">
+        <button class="modal-btn cancel" bindtap="hideEditModal">取消</button>
+        <button class="modal-btn confirm" bindtap="saveEdit">保存</button>
+      </view>
+    </view>
+  </view>
+</view>
+
+<view wx:else class="loading">
+  <text>加载中...</text>
+</view>

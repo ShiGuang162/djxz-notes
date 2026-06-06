@@ -126,9 +126,8 @@ Page({
 
   goToGoalDetail(e) {
     const id = e.currentTarget.dataset.id
-    wx.showToast({
-      title: '目标详情功能开发中',
-      icon: 'none'
+    wx.navigateTo({
+      url: `/pages/goal/detail?id=${id}`
     })
   },
 

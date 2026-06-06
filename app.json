@@ -4,7 +4,8 @@
     "pages/diary/edit",
     "pages/diary/detail",
     "pages/checkin/index",
-    "pages/profile/index"
+    "pages/profile/index",
+    "pages/goal/detail"
   ],
   "window": {
     "backgroundTextStyle": "light",

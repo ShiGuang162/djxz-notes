@@ -52,15 +52,11 @@
           <text class="card-text multiline">{{item.content}}</text>
         </view>
         <view class="card-images" wx:if="{{item.images && item.images.length > 0}}">
-          <image 
-            wx:for="{{item.images}}" 
-            wx:key="index" 
-            wx:for-index="imgIndex"
-            wx:if="{{imgIndex < 3}}"
-            class="card-img" 
-            src="{{item}}" 
-            mode="aspectFill"
-          />
+          <block wx:for="{{item.images}}" wx:key="index" wx:for-item="img">
+            <view wx:if="{{index < 3}}" class="card-img-wrapper">
+              <image class="card-img" src="{{img}}" mode="aspectFill" />
+            </view>
+          </block>
           <view wx:if="{{item.images.length > 3}}" class="more-images">
             <text class="more-text">+{{item.images.length - 3}}</text>
           </view>
@@ -81,8 +77,8 @@
       <text class="section-more" bindtap="goToGoals">管理目标</text>
     </view>
     
-    <view wx:if="goalList.length === 0" class="empty-state">
-      <text class="empty-icon">🎯</text>
+    <view wx:if="{{goalList.length === 0}}" class="empty-state">
+      <image class="empty-icon-img" src="/images/target.png" mode="aspectFit"/>
       <text class="empty-text">还没有目标，设定一个吧</text>
     </view>
     
@@ -104,7 +100,7 @@
             </view>
           </view>
           <text class="goal-title">{{item.title}}</text>
-          <view class="goal-status" wx:if="item.status === 'completed'">
+          <view class="goal-status" wx:if="{{item.status === 'completed'}}">
             <text class="status-text">已完成</text>
           </view>
         </view>

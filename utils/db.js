@@ -194,6 +194,7 @@ const goal = {
       targetDays: goalData.targetDays,
       completedDays: 0,
       status: 'active',
+      checkinDates: [],
       createTime: new Date().toISOString()
     }
     data.goals.unshift(goal)
@@ -241,6 +242,65 @@ const goal = {
     }
     
     saveLocalData(data)
+  },
+
+  async checkIn(id, dateStr) {
+    const data = getLocalData()
+    const goal = data.goals.find(g => g._id === id)
+    if (!goal) return { success: false, message: '目标不存在' }
+
+    if (!goal.checkinDates) {
+      goal.checkinDates = []
+    }
+
+    if (goal.checkinDates.includes(dateStr)) {
+      return { success: false, message: '今日已打卡', alreadyChecked: true }
+    }
+
+    if (goal.completedDays >= goal.targetDays) {
+      return { success: false, message: '目标已完成' }
+    }
+
+    goal.checkinDates.push(dateStr)
+    goal.completedDays = goal.checkinDates.length
+
+    if (goal.completedDays >= goal.targetDays) {
+      goal.status = 'completed'
+    }
+
+    saveLocalData(data)
+    return { success: true, message: '打卡成功', goal }
+  },
+
+  isCheckedOnDate(goal, dateStr) {
+    if (!goal || !goal.checkinDates) return false
+    return goal.checkinDates.includes(dateStr)
+  },
+
+  getCheckedDates(id) {
+    const data = getLocalData()
+    const goal = data.goals.find(g => g._id === id)
+    if (!goal) return []
+    return goal.checkinDates || []
+  },
+
+  async undoCheckIn(id, dateStr) {
+    const data = getLocalData()
+    const goal = data.goals.find(g => g._id === id)
+    if (!goal || !goal.checkinDates) return { success: false }
+
+    const idx = goal.checkinDates.indexOf(dateStr)
+    if (idx === -1) return { success: false }
+
+    goal.checkinDates.splice(idx, 1)
+    goal.completedDays = goal.checkinDates.length
+
+    if (goal.status === 'completed' && goal.completedDays < goal.targetDays) {
+      goal.status = 'active'
+    }
+
+    saveLocalData(data)
+    return { success: true, goal }
   }
 }
 
