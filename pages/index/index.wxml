@@ -1,7 +1,23 @@
 <view class="container">
-  <view class="header">
+  <!-- 骨架屏 -->
+  <view class="skeleton" wx:if="{{isLoading && !diaryList.length && !goalList.length}}">
+    <view class="skeleton-header">
+      <view class="skeleton-line" style="width: 60%;"></view>
+    </view>
+    <view class="skeleton-actions">
+      <view class="skeleton-action"></view>
+      <view class="skeleton-action"></view>
+    </view>
+    <view class="skeleton-section">
+      <view class="skeleton-line" style="width: 40%;"></view>
+      <view class="skeleton-card"></view>
+      <view class="skeleton-card"></view>
+    </view>
+  </view>
+
+  <view class="header" wx:if="{{!isLoading || diaryList.length || goalList.length}}">
     <view class="greeting">
-      <text class="greeting-text">{{greeting}}，{{userInfo.nickName}}</text>
+      <text class="greeting-text">{{greeting}}，{{userInfo.nickName || '用户'}}</text>
     </view>
     <view class="checkin-status" wx:if="{{continuousDays > 0}}">
       <view class="checkin-badge">

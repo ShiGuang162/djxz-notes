@@ -36,20 +36,29 @@ Page({
   initUser() {
     try {
       const openid = App.getOpenid()
-      const userInfo = App.getUserInfo()
-
-      const existingUser = user.get(openid)
-      if (!existingUser) {
-        user.add({
-          _openid: openid,
-          nickName: userInfo.nickName,
-          avatarUrl: userInfo.avatarUrl
+      
+      // getUserInfo 返回 Promise，需要正确处理
+      App.getUserInfo().then(userInfo => {
+        const existingUser = user.get(openid)
+        if (!existingUser || existingUser._openid === 'mock_openid') {
+          user.add({
+            _openid: openid,
+            nickName: userInfo.nickName || '用户',
+            avatarUrl: userInfo.avatarUrl || ''
+          })
+        }
+        this.setData({ userInfo })
+      }).catch(() => {
+        // 用户未授权，使用默认信息
+        this.setData({
+          userInfo: { nickName: '用户', avatarUrl: '' }
         })
-      }
-
-      this.setData({ userInfo })
+      })
     } catch (error) {
       console.error('用户初始化失败:', error)
+      this.setData({
+        userInfo: { nickName: '用户', avatarUrl: '' }
+      })
     }
   },
 

@@ -1,17 +1,31 @@
 const STORAGE_KEY = 'my_blog_data'
 const STORAGE_VERSION = '1.0.0'
 
+// 内存缓存，减少重复读取存储
+let dataCache = null
+let cacheTimestamp = 0
+const CACHE_TTL = 100 // 缓存有效期(ms)，小程序单线程，短时间内多次操作可复用
+
 const getLocalData = () => {
+  const now = Date.now()
+  if (dataCache && (now - cacheTimestamp) < CACHE_TTL) {
+    return dataCache
+  }
+
   try {
     const data = wx.getStorageSync(STORAGE_KEY)
     if (!data) {
-      return initDefaultData()
+      dataCache = initDefaultData()
+      return dataCache
     }
     const parsed = typeof data === 'string' ? JSON.parse(data) : data
-    return migrateData(parsed)
+    dataCache = migrateData(parsed)
+    cacheTimestamp = now
+    return dataCache
   } catch (error) {
     console.error('读取数据失败:', error)
-    return initDefaultData()
+    dataCache = initDefaultData()
+    return dataCache
   }
 }
 
@@ -31,41 +45,31 @@ const initDefaultData = () => {
 const migrateData = (data) => {
   let needsSave = false
 
+  const ensureArray = (key) => {
+    if (!data[key]) {
+      data[key] = []
+      needsSave = true
+    }
+  }
+
+  ensureArray('users')
+  ensureArray('diaries')
+  ensureArray('checkins')
+  ensureArray('goals')
+  ensureArray('comments')
+
   if (!data.version) {
     data.version = STORAGE_VERSION
     needsSave = true
   }
 
-  if (!data.users) {
-    data.users = []
-    needsSave = true
-  }
-
-  if (!data.diaries) {
-    data.diaries = []
-    needsSave = true
-  }
-
-  if (!data.checkins) {
-    data.checkins = []
-    needsSave = true
-  }
-
-  if (!data.goals) {
-    data.goals = []
-    needsSave = true
-  }
-
-  if (!data.comments) {
-    data.comments = []
-    needsSave = true
-  }
-
+  // 数据规范化
   data.diaries = data.diaries.map(d => ({
     ...d,
     likes: d.likes || 0,
     likedUsers: d.likedUsers || [],
     images: d.images || [],
+    commentCount: d.commentCount || 0,
     createTime: d.createTime || new Date().toISOString(),
     updateTime: d.updateTime || new Date().toISOString()
   }))
@@ -76,6 +80,12 @@ const migrateData = (data) => {
     status: g.status || (g.completedDays >= g.targetDays ? 'completed' : 'active'),
     checkinDates: g.checkinDates || [],
     createTime: g.createTime || new Date().toISOString()
+  }))
+
+  data.checkins = data.checkins.map(c => ({
+    ...c,
+    userId: c.userId || 'mock_openid',
+    createTime: c.createTime || new Date().toISOString()
   }))
 
   if (needsSave) {
@@ -89,6 +99,9 @@ const saveLocalData = (data) => {
   try {
     data.version = STORAGE_VERSION
     wx.setStorageSync(STORAGE_KEY, JSON.stringify(data))
+    // 更新缓存
+    dataCache = data
+    cacheTimestamp = Date.now()
   } catch (error) {
     console.error('保存数据失败:', error)
     wx.showToast({
@@ -97,6 +110,12 @@ const saveLocalData = (data) => {
       duration: 2000
     })
   }
+}
+
+// 清除缓存，用于需要强制刷新数据的场景
+const clearCache = () => {
+  dataCache = null
+  cacheTimestamp = 0
 }
 
 const generateId = () => {
@@ -108,6 +127,18 @@ const mockUser = {
   nickName: '用户',
   avatarUrl: '',
   createTime: new Date().toISOString()
+}
+
+// 通用错误处理包装器
+const withErrorHandling = (fn, errorMessage) => {
+  return (...args) => {
+    try {
+      return fn(...args)
+    } catch (error) {
+      console.error(`${errorMessage}:`, error)
+      return null
+    }
+  }
 }
 
 const user = {
@@ -604,5 +635,6 @@ module.exports = {
   diary,
   checkin,
   goal,
-  comment
+  comment,
+  clearCache
 }

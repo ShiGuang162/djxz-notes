@@ -7,15 +7,16 @@ Page({
     diaryCount: 0,
     checkinCount: 0,
     goalCount: 0,
+    isLoading: false,
     motivation: {
       title: '今日寄语',
       text: '每一天都是新的开始，用心记录生活的点滴。'
     }
   },
 
-  async onLoad() {
-    await this.initUser()
-    await this.loadStats()
+  onLoad() {
+    this.initUser()
+    this.loadStats()
     this.setMotivation()
   },
 
@@ -23,32 +24,50 @@ Page({
     this.loadStats()
   },
 
-  async initUser() {
+  initUser() {
     try {
-      const userInfo = await App.getUserInfo()
-      this.setData({ userInfo })
+      const userInfo = App.getUserInfo()
+      // getUserInfo 返回 Promise
+      if (userInfo && typeof userInfo.then === 'function') {
+        userInfo.then(info => {
+          this.setData({ userInfo: info || { nickName: '用户', avatarUrl: '' } })
+        }).catch(() => {
+          this.setData({ userInfo: { nickName: '用户', avatarUrl: '' } })
+        })
+      } else {
+        this.setData({ userInfo: userInfo || { nickName: '用户', avatarUrl: '' } })
+      }
     } catch (error) {
       console.error('获取用户信息失败:', error)
+      this.setData({ userInfo: { nickName: '用户', avatarUrl: '' } })
     }
   },
 
-  async loadStats() {
+  loadStats() {
+    if (this.data.isLoading) return
+    this.setData({ isLoading: true })
+
     try {
-      const openid = await App.getOpenid()
-      
-      const [diaries, checkins, goals] = await Promise.all([
-        diary.getAll(openid),
-        checkin.getAll(openid),
-        goal.getAll(openid)
-      ])
-      
+      const openid = App.getOpenid()
+
+      const diaries = diary.getAll(openid) || []
+      const checkins = checkin.getAll(openid) || []
+      const goals = goal.getAll(openid) || []
+
       this.setData({
         diaryCount: diaries.length,
         checkinCount: checkins.length,
-        goalCount: goals.length
+        goalCount: goals.length,
+        isLoading: false
       })
     } catch (error) {
       console.error('加载统计数据失败:', error)
+      this.setData({
+        diaryCount: 0,
+        checkinCount: 0,
+        goalCount: 0,
+        isLoading: false
+      })
     }
   },
 
@@ -62,7 +81,7 @@ Page({
       { title: '今日寄语', text: '相信自己，你比想象中更强大。' },
       { title: '今日寄语', text: '小目标积累成大成就，加油！' }
     ]
-    
+
     const today = new Date().getDate()
     const index = (today - 1) % motivations.length
     this.setData({ motivation: motivations[index] })
