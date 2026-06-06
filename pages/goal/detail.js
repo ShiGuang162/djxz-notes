@@ -1,5 +1,5 @@
 const App = getApp()
-const { goal, diary, checkin } = require('../../utils/db.js')
+const { goal, diary } = require('../../utils/db.js')
 const { formatDate, formatDateCN } = require('../../utils/util.js')
 
 Page({
@@ -17,7 +17,8 @@ Page({
     recentCheckins: [],
     allCheckinDates: [],
     totalDiaries: 0,
-    hasLoaded: false
+    hasLoaded: false,
+    isLoading: false
   },
 
   onLoad(options) {
@@ -32,14 +33,14 @@ Page({
     }
   },
 
-  async loadData() {
+  loadData() {
+    if (this.data.isLoading) return
+    this.setData({ isLoading: true })
+
     try {
-      const goalData = await goal.getById(this.goalId)
+      const goalData = goal.getById(this.goalId)
       if (!goalData) {
-        wx.showToast({
-          title: '目标不存在',
-          icon: 'none'
-        })
+        wx.showToast({ title: '目标不存在', icon: 'none' })
         setTimeout(() => wx.navigateBack(), 1500)
         return
       }
@@ -52,8 +53,8 @@ Page({
         weekday: this.getWeekDay(dateStr)
       }))
 
-      const openid = await App.getOpenid()
-      const diaries = await diary.getAll(openid)
+      const openid = App.getOpenid()
+      const diaries = diary.getAll(openid) || []
 
       const progress = Math.min(Math.round((goalData.completedDays / goalData.targetDays) * 100), 100)
 
@@ -64,14 +65,13 @@ Page({
         recentCheckins: recentDates,
         allCheckinDates: sortedDates,
         totalDiaries: diaries.length,
-        hasLoaded: true
+        hasLoaded: true,
+        isLoading: false
       })
     } catch (error) {
+      this.setData({ isLoading: false, hasLoaded: true })
       console.error('加载目标详情失败:', error)
-      wx.showToast({
-        title: '加载失败',
-        icon: 'none'
-      })
+      wx.showToast({ title: '加载失败', icon: 'none' })
     }
   },
 
@@ -80,7 +80,7 @@ Page({
     return weekDays[new Date(dateStr).getDay()]
   },
 
-  async doCheckIn() {
+  doCheckIn() {
     if (this.data.isCheckedToday || this.data.goal.status === 'completed') {
       return
     }
@@ -88,32 +88,23 @@ Page({
     wx.showLoading({ title: '打卡中...' })
 
     try {
-      const result = await goal.checkIn(this.goalId, this.data.today)
+      const result = goal.checkIn(this.goalId, this.data.today)
       wx.hideLoading()
 
       if (result.success) {
-        wx.showToast({
-          title: '打卡成功',
-          icon: 'success'
-        })
+        wx.showToast({ title: '打卡成功', icon: 'success' })
         this.loadData()
       } else {
-        wx.showToast({
-          title: result.message || '打卡失败',
-          icon: 'none'
-        })
+        wx.showToast({ title: result.message || '打卡失败', icon: 'none' })
       }
     } catch (error) {
       wx.hideLoading()
       console.error('打卡失败:', error)
-      wx.showToast({
-        title: '打卡失败',
-        icon: 'none'
-      })
+      wx.showToast({ title: '打卡失败', icon: 'none' })
     }
   },
 
-  async undoCheckIn(e) {
+  undoCheckIn(e) {
     const dateStr = e.currentTarget.dataset.date
 
     wx.showModal({
@@ -121,31 +112,22 @@ Page({
       content: `确定要撤销 ${formatDateCN(new Date(dateStr))} 的打卡吗？`,
       confirmText: '确定',
       cancelText: '取消',
-      success: async (res) => {
+      success: (res) => {
         if (res.confirm) {
           wx.showLoading({ title: '处理中...' })
           try {
-            const result = await goal.undoCheckIn(this.goalId, dateStr)
+            const result = goal.undoCheckIn(this.goalId, dateStr)
             wx.hideLoading()
             if (result.success) {
-              wx.showToast({
-                title: '已撤销',
-                icon: 'success'
-              })
+              wx.showToast({ title: '已撤销', icon: 'success' })
               this.loadData()
             } else {
-              wx.showToast({
-                title: '撤销失败',
-                icon: 'none'
-              })
+              wx.showToast({ title: '撤销失败', icon: 'none' })
             }
           } catch (error) {
             wx.hideLoading()
             console.error('撤销失败:', error)
-            wx.showToast({
-              title: '撤销失败',
-              icon: 'none'
-            })
+            wx.showToast({ title: '撤销失败', icon: 'none' })
           }
         }
       }
@@ -179,36 +161,27 @@ Page({
     this.setData({ 'editGoal.targetDays': e.detail.value })
   },
 
-  async saveEdit() {
+  saveEdit() {
     if (!this.data.editGoal.title.trim()) {
-      wx.showToast({
-        title: '请输入目标名称',
-        icon: 'none'
-      })
+      wx.showToast({ title: '请输入目标名称', icon: 'none' })
       return
     }
 
     const targetDays = parseInt(this.data.editGoal.targetDays)
     if (!targetDays || targetDays <= 0) {
-      wx.showToast({
-        title: '请输入有效的天数',
-        icon: 'none'
-      })
+      wx.showToast({ title: '请输入有效的天数', icon: 'none' })
       return
     }
 
     if (targetDays < this.data.goal.completedDays) {
-      wx.showToast({
-        title: `天数不能小于已完成的 ${this.data.goal.completedDays} 天`,
-        icon: 'none'
-      })
+      wx.showToast({ title: `天数不能小于已完成的 ${this.data.goal.completedDays} 天`, icon: 'none' })
       return
     }
 
     wx.showLoading({ title: '保存中...' })
 
     try {
-      await goal.update(this.goalId, {
+      goal.update(this.goalId, {
         title: this.data.editGoal.title,
         description: this.data.editGoal.description,
         targetDays: targetDays
@@ -216,18 +189,12 @@ Page({
 
       wx.hideLoading()
       this.setData({ showEditModal: false })
-      wx.showToast({
-        title: '保存成功',
-        icon: 'success'
-      })
+      wx.showToast({ title: '保存成功', icon: 'success' })
       this.loadData()
     } catch (error) {
       wx.hideLoading()
       console.error('保存失败:', error)
-      wx.showToast({
-        title: '保存失败',
-        icon: 'none'
-      })
+      wx.showToast({ title: '保存失败', icon: 'none' })
     }
   },
 
@@ -238,24 +205,18 @@ Page({
       confirmText: '删除',
       confirmColor: '#FF6B6B',
       cancelText: '取消',
-      success: async (res) => {
+      success: (res) => {
         if (res.confirm) {
           wx.showLoading({ title: '删除中...' })
           try {
-            await goal.delete(this.goalId)
+            goal.delete(this.goalId)
             wx.hideLoading()
-            wx.showToast({
-              title: '已删除',
-              icon: 'success'
-            })
+            wx.showToast({ title: '已删除', icon: 'success' })
             setTimeout(() => wx.navigateBack(), 1000)
           } catch (error) {
             wx.hideLoading()
             console.error('删除失败:', error)
-            wx.showToast({
-              title: '删除失败',
-              icon: 'none'
-            })
+            wx.showToast({ title: '删除失败', icon: 'none' })
           }
         }
       }

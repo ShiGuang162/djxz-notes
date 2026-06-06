@@ -19,7 +19,7 @@
         </view>
       </view>
       
-      <view class="checkin-btn" bindtap="doCheckin" wx:if="!hasCheckedIn">
+      <view class="checkin-btn" bindtap="doCheckin" wx:if="{{!hasCheckedIn}}">
         <text class="checkin-icon">✓</text>
         <text class="checkin-text">立即打卡</text>
       </view>

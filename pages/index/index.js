@@ -1,6 +1,6 @@
 const App = getApp()
 const { diary, checkin, goal, user } = require('../../utils/db.js')
-const { formatDate } = require('../../utils/util.js')
+const { formatTime } = require('../../utils/util.js')
 
 Page({
   data: {
@@ -8,12 +8,13 @@ Page({
     diaryList: [],
     goalList: [],
     continuousDays: 0,
-    greeting: '早上好'
+    greeting: '早上好',
+    isLoading: false
   },
 
-  async onLoad() {
-    await this.initUser()
-    await this.loadData()
+  onLoad() {
+    this.initUser()
+    this.loadData()
     this.setGreeting()
   },
 
@@ -32,63 +33,55 @@ Page({
     this.setData({ greeting })
   },
 
-  async initUser() {
+  initUser() {
     try {
-      const openid = await App.getOpenid()
-      const userInfo = await App.getUserInfo()
-      
-      let existingUser = await user.get(openid)
+      const openid = App.getOpenid()
+      const userInfo = App.getUserInfo()
+
+      const existingUser = user.get(openid)
       if (!existingUser) {
-        await user.add({
+        user.add({
           _openid: openid,
           nickName: userInfo.nickName,
           avatarUrl: userInfo.avatarUrl
         })
       }
-      
+
       this.setData({ userInfo })
     } catch (error) {
       console.error('用户初始化失败:', error)
     }
   },
 
-  async loadData() {
+  loadData() {
+    if (this.data.isLoading) return
+    this.setData({ isLoading: true })
+
     try {
-      const openid = await App.getOpenid()
-      console.log('首页加载数据，userId:', openid)
-      
-      const [diaries, goals, days] = await Promise.all([
-        diary.getAll(openid),
-        goal.getAll(openid),
-        checkin.getContinuousDays(openid)
-      ])
-      
-      console.log('加载的日记列表:', diaries)
-      console.log('日记数量:', diaries.length)
-      
-      // 预处理日记数据，格式化日期
-      const formattedDiaries = diaries.map(diary => {
-        const date = new Date(diary.createTime)
-        const year = date.getFullYear()
-        const month = (date.getMonth() + 1).toString().padStart(2, '0')
-        const day = date.getDate().toString().padStart(2, '0')
-        const hour = date.getHours().toString().padStart(2, '0')
-        const minute = date.getMinutes().toString().padStart(2, '0')
-        return {
-          ...diary,
-          formattedTime: `${year}-${month}-${day} ${hour}:${minute}`
-        }
-      })
-      
-      console.log('格式化后的日记:', formattedDiaries)
-      
+      const openid = App.getOpenid()
+      const diaries = diary.getAll(openid) || []
+      const goals = goal.getAll(openid) || []
+      const days = checkin.getContinuousDays(openid) || 0
+
+      const formattedDiaries = (diaries || []).map(d => ({
+        ...d,
+        formattedTime: formatTime(new Date(d.createTime))
+      }))
+
       this.setData({
         diaryList: formattedDiaries,
-        goalList: goals.slice(0, 5),
+        goalList: (goals || []).slice(0, 5),
         continuousDays: days
       })
     } catch (error) {
       console.error('加载数据失败:', error)
+      this.setData({
+        diaryList: [],
+        goalList: [],
+        continuousDays: 0
+      })
+    } finally {
+      this.setData({ isLoading: false })
     }
   },
 
@@ -129,22 +122,5 @@ Page({
     wx.navigateTo({
       url: `/pages/goal/detail?id=${id}`
     })
-  },
-
-  formatDate(date) {
-    console.log('formatDate 接收到的日期:', date)
-    if (!date) return '未知日期'
-    const dateObj = new Date(date)
-    console.log('格式化后的日期对象:', dateObj)
-    const year = dateObj.getFullYear()
-    const month = dateObj.getMonth() + 1
-    const day = dateObj.getDate()
-    const hour = dateObj.getHours()
-    const minute = dateObj.getMinutes()
-    
-    const formatNumber = n => n.toString().padStart(2, '0')
-    const result = `${year}-${formatNumber(month)}-${formatNumber(day)} ${formatNumber(hour)}:${formatNumber(minute)}`
-    console.log('格式化结果:', result)
-    return result
   }
 })

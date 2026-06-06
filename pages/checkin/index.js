@@ -18,11 +18,12 @@ Page({
       title: '',
       description: '',
       targetDays: ''
-    }
+    },
+    isLoading: false
   },
 
-  async onLoad() {
-    await this.loadData()
+  onLoad() {
+    this.loadData()
     this.generateCalendar()
   },
 
@@ -33,60 +34,72 @@ Page({
     }
   },
 
-  async loadData() {
+  loadData() {
+    if (this.data.isLoading) return
+    this.setData({ isLoading: true })
+
     try {
-      const openid = await App.getOpenid()
+      const openid = App.getOpenid()
       const today = formatDate(new Date())
-      
-      const [continuous, allCheckins, monthCheckins, goals, todayCheckin] = await Promise.all([
-        checkin.getContinuousDays(openid),
-        checkin.getAll(openid),
-        checkin.getMonthCheckins(openid, this.data.currentYear, this.data.currentMonth),
-        goal.getAll(openid),
-        checkin.getByDate(openid, today)
-      ])
-      
+
+      const continuous = checkin.getContinuousDays(openid) || 0
+      const allCheckins = checkin.getAll(openid) || []
+      const monthCheckins = checkin.getMonthCheckins(openid, this.data.currentYear, this.data.currentMonth) || []
+      const goals = goal.getAll(openid) || []
+      const todayCheckin = checkin.getByDate(openid, today)
+
       this.setData({
-        continuousDays: continuous,
-        totalDays: allCheckins.length,
-        monthDays: monthCheckins.length,
+        continuousDays: continuous || 0,
+        totalDays: (allCheckins || []).length,
+        monthDays: (monthCheckins || []).length,
         hasCheckedIn: !!todayCheckin,
-        goalList: goals,
-        checkedDates: monthCheckins.map(c => c.checkDate)
+        goalList: goals || [],
+        checkedDates: (monthCheckins || []).map(c => c.checkDate)
       })
     } catch (error) {
       console.error('加载数据失败:', error)
+      this.setData({
+        continuousDays: 0,
+        totalDays: 0,
+        monthDays: 0,
+        hasCheckedIn: false,
+        goalList: [],
+        checkedDates: []
+      })
+    } finally {
+      this.setData({ isLoading: false })
     }
   },
 
   generateCalendar() {
     const year = this.data.currentYear
     const month = this.data.currentMonth
-    
+
     const firstDay = new Date(year, month - 1, 1)
     const lastDay = new Date(year, month, 0)
     const daysInMonth = lastDay.getDate()
     const startWeekDay = firstDay.getDay()
-    
+
     const today = new Date()
     const todayStr = formatDate(today)
-    
+    const checkedDates = this.data.checkedDates || []
+
     const calendarDays = []
-    
+
     for (let i = 0; i < startWeekDay; i++) {
       calendarDays.push({ day: '', date: '', checked: false, isToday: false })
     }
-    
+
     for (let i = 1; i <= daysInMonth; i++) {
       const dateStr = `${year}-${month.toString().padStart(2, '0')}-${i.toString().padStart(2, '0')}`
       calendarDays.push({
         day: i,
         date: dateStr,
-        checked: this.data.checkedDates?.includes(dateStr) || false,
+        checked: checkedDates.includes(dateStr),
         isToday: dateStr === todayStr
       })
     }
-    
+
     this.setData({ calendarDays })
   },
 
@@ -123,36 +136,28 @@ Page({
     })
   },
 
-  async doCheckin() {
+  doCheckin() {
     if (this.data.hasCheckedIn) return
 
-    wx.showLoading({
-      title: '打卡中...'
-    })
+    wx.showLoading({ title: '打卡中...' })
 
     try {
-      const openid = await App.getOpenid()
+      const openid = App.getOpenid()
       const today = formatDate(new Date())
-      
-      await checkin.add({
+
+      checkin.add({
         userId: openid,
         checkDate: today
       })
 
       wx.hideLoading()
-      wx.showToast({
-        title: '打卡成功',
-        icon: 'success'
-      })
-
-      await this.loadData()
+      wx.showToast({ title: '打卡成功', icon: 'success' })
+      this.loadData()
+      this.generateCalendar()
     } catch (error) {
       wx.hideLoading()
       console.error('打卡失败:', error)
-      wx.showToast({
-        title: '打卡失败',
-        icon: 'none'
-      })
+      wx.showToast({ title: '打卡失败', icon: 'none' })
     }
   },
 
@@ -161,15 +166,13 @@ Page({
   },
 
   hideAddGoalModal() {
-    console.log('hideAddGoalModal called')
-    this.setData({ 
+    this.setData({
       showGoalModal: false,
       newGoal: { title: '', description: '', targetDays: '' }
     })
   },
 
   handleCloseModal() {
-    console.log('handleCloseModal called')
     this.hideAddGoalModal()
   },
 
@@ -187,87 +190,61 @@ Page({
     this.setData({ 'newGoal.targetDays': e.detail.value })
   },
 
-  async addGoal() {
+  addGoal() {
     if (!this.data.newGoal.title.trim()) {
-      wx.showToast({
-        title: '请输入目标名称',
-        icon: 'none'
-      })
-      return
-    }
-    
-    if (!this.data.newGoal.targetDays || parseInt(this.data.newGoal.targetDays) <= 0) {
-      wx.showToast({
-        title: '请输入有效的天数',
-        icon: 'none'
-      })
+      wx.showToast({ title: '请输入目标名称', icon: 'none' })
       return
     }
 
-    wx.showLoading({
-      title: '添加中...'
-    })
+    const days = parseInt(this.data.newGoal.targetDays)
+    if (!days || days <= 0) {
+      wx.showToast({ title: '请输入有效的天数', icon: 'none' })
+      return
+    }
+
+    wx.showLoading({ title: '添加中...' })
 
     try {
-      const openid = await App.getOpenid()
-      
-      await goal.add({
+      const openid = App.getOpenid()
+
+      goal.add({
         userId: openid,
         title: this.data.newGoal.title,
         description: this.data.newGoal.description,
-        targetDays: parseInt(this.data.newGoal.targetDays)
+        targetDays: days
       })
 
       wx.hideLoading()
       this.hideAddGoalModal()
-      wx.showToast({
-        title: '添加成功',
-        icon: 'success'
-      })
-
-      await this.loadData()
+      wx.showToast({ title: '添加成功', icon: 'success' })
+      this.loadData()
     } catch (error) {
       wx.hideLoading()
       console.error('添加目标失败:', error)
-      wx.showToast({
-        title: '添加失败',
-        icon: 'none'
-      })
+      wx.showToast({ title: '添加失败', icon: 'none' })
     }
   },
 
-  async completeGoalDay(e) {
+  completeGoalDay(e) {
     const goalId = e.currentTarget.dataset.id
-    
-    wx.showLoading({
-      title: '打卡中...'
-    })
+
+    wx.showLoading({ title: '打卡中...' })
 
     try {
       const today = formatDate(new Date())
-      const result = await goal.checkIn(goalId, today)
-      
+      const result = goal.checkIn(goalId, today)
+
       wx.hideLoading()
       if (result.success) {
-        wx.showToast({
-          title: '打卡成功',
-          icon: 'success'
-        })
+        wx.showToast({ title: '打卡成功', icon: 'success' })
       } else {
-        wx.showToast({
-          title: result.message || '打卡失败',
-          icon: 'none'
-        })
+        wx.showToast({ title: result.message || '打卡失败', icon: 'none' })
       }
-
-      await this.loadData()
+      this.loadData()
     } catch (error) {
       wx.hideLoading()
       console.error('目标打卡失败:', error)
-      wx.showToast({
-        title: '打卡失败',
-        icon: 'none'
-      })
+      wx.showToast({ title: '打卡失败', icon: 'none' })
     }
   },
 

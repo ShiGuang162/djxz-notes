@@ -32,13 +32,9 @@ App({
   },
 
   getOpenid: function() {
-    return new Promise((resolve) => {
-      if (this.globalData.openid) {
-        resolve(this.globalData.openid)
-      } else {
-        this.globalData.openid = 'mock_openid'
-        resolve('mock_openid')
-      }
-    })
+    if (!this.globalData.openid) {
+      this.globalData.openid = 'mock_openid'
+    }
+    return this.globalData.openid
   }
 })

@@ -3,7 +3,7 @@
     <view class="greeting">
       <text class="greeting-text">{{greeting}}，{{userInfo.nickName}}</text>
     </view>
-    <view class="checkin-status" wx:if="continuousDays > 0">
+    <view class="checkin-status" wx:if="{{continuousDays > 0}}">
       <view class="checkin-badge">
         <text class="badge-icon">🔥</text>
         <text class="badge-text">{{continuousDays}}天连续打卡</text>
