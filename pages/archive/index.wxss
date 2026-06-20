@@ -1,0 +1,331 @@
+/* 页面容器 */
+.container {
+  min-height: 100vh;
+  background: #f8f9fa;
+  padding-bottom: 160rpx;
+}
+
+/* ========== 顶部导航栏 ========== */
+.nav-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 32rpx;
+  height: 100rpx;
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.nav-back {
+  width: 60rpx;
+  height: 60rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.back-arrow {
+  font-size: 48rpx;
+  color: #6c757d;
+  font-weight: 300;
+  line-height: 1;
+}
+
+.nav-title {
+  font-size: 36rpx;
+  font-weight: 700;
+  color: #212529;
+  letter-spacing: 2rpx;
+}
+
+.nav-share {
+  width: 60rpx;
+  height: 60rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.share-icon {
+  font-size: 36rpx;
+  color: #6c757d;
+}
+
+/* ========== 年份选择器 ========== */
+.year-selector {
+  padding: 24rpx 32rpx;
+  background: #f8f9fa;
+}
+
+.year-tabs {
+  display: flex;
+  background: #e9ecef;
+  border-radius: 16rpx;
+  padding: 6rpx;
+  gap: 8rpx;
+}
+
+.year-tab {
+  flex: 1;
+  height: 72rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12rpx;
+  transition: all 0.3s ease;
+}
+
+.year-tab.active {
+  background: #ffffff;
+  box-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.08);
+}
+
+.year-text {
+  font-size: 28rpx;
+  font-weight: 600;
+  color: #6c757d;
+  transition: color 0.3s ease;
+}
+
+.year-tab.active .year-text {
+  color: #212529;
+  font-weight: 700;
+}
+
+/* ========== 归档内容区 ========== */
+.archive-content {
+  padding: 16rpx 32rpx;
+}
+
+/* 月份区块 */
+.month-section {
+  margin-bottom: 40rpx;
+}
+
+.month-header {
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: 24rpx;
+}
+
+/* 月份指示器（时间轴） */
+.month-indicator {
+  width: 32rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-right: 24rpx;
+  position: relative;
+}
+
+.month-dot {
+  width: 16rpx;
+  height: 16rpx;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #8B5CF6 0%, #A78BFA 100%);
+  box-shadow: 0 4rpx 12rpx rgba(139, 92, 246, 0.4);
+  margin-top: 10rpx;
+  position: relative;
+  z-index: 2;
+}
+
+.month-line {
+  width: 4rpx;
+  flex: 1;
+  background: linear-gradient(180deg, #C4B5FD 0%, transparent 100%);
+  margin-top: 8rpx;
+  min-height: 100rpx;
+}
+
+.month-info {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+}
+
+.month-label {
+  font-size: 36rpx;
+  font-weight: 800;
+  color: #212529;
+  letter-spacing: 2rpx;
+}
+
+.month-count {
+  font-size: 24rpx;
+  color: #6c757d;
+  font-weight: 500;
+  background: #e9ecef;
+  padding: 4rpx 12rpx;
+  border-radius: 8rpx;
+}
+
+/* 日记条目列表 */
+.diary-entries {
+  padding-left: 56rpx;
+}
+
+.diary-entry {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  padding: 24rpx 28rpx;
+  background: #ffffff;
+  border-radius: 20rpx;
+  margin-bottom: 16rpx;
+  box-shadow: 0 4rpx 16rpx rgba(0, 0, 0, 0.04);
+  transition: all 0.2s ease;
+  border: 1rpx solid rgba(0, 0, 0, 0.04);
+}
+
+.diary-entry:active {
+  transform: scale(0.98);
+  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.08);
+}
+
+.entry-left {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  margin-right: 24rpx;
+  overflow: hidden;
+}
+
+.entry-title {
+  font-size: 30rpx;
+  font-weight: 700;
+  color: #212529;
+  margin-bottom: 12rpx;
+  line-height: 1.4;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.entry-preview {
+  font-size: 26rpx;
+  color: #6c757d;
+  line-height: 1.6;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.entry-right {
+  display: flex;
+  align-items: center;
+  padding-top: 4rpx;
+}
+
+.entry-date {
+  font-size: 24rpx;
+  color: #ADB5BD;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+/* ========== 空状态 ========== */
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 200rpx 0;
+}
+
+.empty-icon {
+  font-size: 120rpx;
+  margin-bottom: 32rpx;
+  opacity: 0.6;
+}
+
+.empty-text {
+  font-size: 32rpx;
+  color: #6c757d;
+  font-weight: 600;
+  margin-bottom: 16rpx;
+}
+
+.empty-hint {
+  font-size: 26rpx;
+  color: #ADB5BD;
+}
+
+/* ========== 加载状态 ========== */
+.loading-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 200rpx 0;
+}
+
+.loading-spinner {
+  width: 60rpx;
+  height: 60rpx;
+  border: 6rpx solid #e9ecef;
+  border-top-color: #8B5CF6;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: 24rpx;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.loading-text {
+  font-size: 28rpx;
+  color: #6c757d;
+}
+
+/* ========== 底部统计栏 ========== */
+.stats-footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16rpx;
+  padding: 32rpx 0;
+  background: linear-gradient(180deg, rgba(248, 249, 250, 0) 0%, #f8f9fa 30%);
+  backdrop-filter: blur(20rpx);
+  z-index: 100;
+}
+
+.stats-item {
+  display: flex;
+  align-items: baseline;
+  gap: 4rpx;
+}
+
+.stats-num {
+  font-size: 48rpx;
+  font-weight: 800;
+  color: #212529;
+  line-height: 1.2;
+}
+
+.stats-unit {
+  font-size: 24rpx;
+  color: #6c757d;
+  font-weight: 600;
+}
+
+.stats-separator {
+  font-size: 36rpx;
+  color: #ADB5BD;
+  font-weight: 300;
+  margin: 0 8rpx;
+}
+

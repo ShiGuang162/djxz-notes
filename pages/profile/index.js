@@ -109,9 +109,8 @@ Page({
   },
 
   goToArchive() {
-    wx.showToast({
-      title: '归档功能开发中',
-      icon: 'none'
+    wx.navigateTo({
+      url: '/pages/archive/index'
     })
   },
 
