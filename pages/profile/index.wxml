@@ -7,11 +7,19 @@
 
     <view class="header-content">
       <view class="user-section">
-        <view class="avatar-ring">
-          <image class="avatar" src="{{userInfo.avatarUrl || '/images/profile.png'}}" mode="aspectFill" />
+        <view class="avatar-wrapper" bindtap="chooseAvatar">
+          <view class="avatar-ring">
+            <image class="avatar" src="{{userInfo.avatarUrl || '/images/profile.png'}}" mode="aspectFill" />
+          </view>
+          <view class="avatar-edit-mask">
+            <image class="edit-icon-img" src="/images/头像上传.png" mode="aspectFit" />
+          </view>
         </view>
         <view class="user-info-block">
-          <text class="user-name">{{userInfo.nickName || '记录者'}}</text>
+          <view class="name-wrapper" bindtap="editNickname">
+            <text class="user-name">{{userInfo.nickName || '记录者'}}</text>
+            <text class="edit-icon-small">✎</text>
+          </view>
           <view class="user-badge">
             <text class="badge-dot"></text>
             <text class="badge-text">记录生活，分享美好</text>

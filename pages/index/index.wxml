@@ -17,7 +17,7 @@
 
   <view class="header" wx:if="{{!isLoading || diaryList.length || goalList.length}}">
     <view class="greeting">
-      <text class="greeting-text">{{greeting}}，{{userInfo.nickName || '用户'}}</text>
+      <text class="greeting-text">{{greeting}}，{{userInfo.nickName || '记录者'}}</text>
     </view>
     <view class="checkin-status" wx:if="{{continuousDays > 0}}">
       <view class="checkin-badge">

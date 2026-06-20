@@ -1,7 +1,7 @@
 .container {
   min-height: 100vh;
   background: linear-gradient(135deg, #f5f7fa 0%, #e4e8ec 100%);
-  padding-bottom: 140rpx;
+  padding-bottom: 200rpx;
 }
 
 .loading-state {
@@ -69,6 +69,7 @@
 .comment-section {
   background: #FFFFFF;
   margin: 24rpx;
+  margin-bottom: 180rpx;
   border-radius: 28rpx;
   padding: 32rpx;
   box-shadow: 0 4rpx 24rpx rgba(78, 205, 196, 0.12);
@@ -218,26 +219,52 @@
   align-items: center;
 }
 
-.comment-input {
+.input-wrapper {
   flex: 1;
-  height: 80rpx;
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
   background: linear-gradient(135deg, #F8FAFC 0%, #F0F4F8 100%);
   border-radius: 40rpx;
-  padding: 0 28rpx;
+  padding: 12rpx 20rpx;
+}
+
+.input-avatar {
+  width: 56rpx;
+  height: 56rpx;
+  border-radius: 50%;
+  border: 2rpx solid #FFFFFF;
+  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.1);
+  flex-shrink: 0;
+}
+
+.comment-input {
+  flex: 1;
+  height: 56rpx;
+  background: transparent;
   font-size: 30rpx;
 }
 
 .send-btn {
-  width: 120rpx;
+  width: 100rpx;
   height: 80rpx;
-  background: linear-gradient(135deg, #4ECDC4 0%, #3DBDB5 100%);
+  background: #E8ECF0;
   border-radius: 40rpx;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 4rpx 16rpx rgba(78, 205, 196, 0.35);
+  box-shadow: none;
   border: none;
   padding: 0;
+  transition: all 0.3s ease;
+}
+
+.send-btn.active {
+  width: 100rpx;
+  height: 80rpx;
+  background: linear-gradient(135deg, #4ECDC4 0%, #3DBDB5 100%);
+  border-radius: 40rpx;
+  box-shadow: 0 4rpx 16rpx rgba(78, 205, 196, 0.35);
 }
 
 .send-btn[disabled] {
@@ -247,8 +274,17 @@
 
 .send-text {
   font-size: 28rpx;
-  color: #FFFFFF;
+  color: #95A5A6;
   font-weight: 600;
+}
+
+.send-btn.active .send-text {
+  color: #FFFFFF;
+}
+
+.send-icon {
+  width: 36rpx;
+  height: 36rpx;
 }
 
 @keyframes bounce {

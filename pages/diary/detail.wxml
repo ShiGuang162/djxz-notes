@@ -64,15 +64,19 @@
   </view>
 
   <view class="input-area">
-    <input
-      class="comment-input"
-      placeholder="写下你的评论..."
-      value="{{commentText}}"
-      bindinput="onCommentInput"
-      bindconfirm="submitComment"
-    />
-    <button class="send-btn" bindtap="submitComment" disabled="{{!commentText.trim()}}">
-      <text class="send-text">发送</text>
+    <view class="input-wrapper">
+      <image class="input-avatar" src="{{userInfo.avatarUrl || '/images/profile.png'}}" mode="aspectFill" />
+      <input
+        class="comment-input"
+        placeholder="写下你的评论..."
+        value="{{commentText}}"
+        bindinput="onCommentInput"
+        bindconfirm="submitComment"
+      />
+    </view>
+    <button class="send-btn {{commentText.trim() ? 'active' : ''}}" bindtap="submitComment" disabled="{{!commentText.trim()}}">
+      <image class="send-icon" src="/images/评论.png" mode="aspectFit" wx:if="{{commentText.trim()}}"/>
+      <text class="send-text" wx:else>发送</text>
     </button>
   </view>
 </view>

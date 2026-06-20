@@ -26,20 +26,35 @@ Page({
 
   initUser() {
     try {
+      // 先尝试从本地缓存读取用户信息
+      const cachedUserInfo = this.loadUserInfoFromCache()
+      if (cachedUserInfo) {
+        this.setData({ userInfo: cachedUserInfo })
+        return
+      }
+
       const userInfo = App.getUserInfo()
       // getUserInfo 返回 Promise
       if (userInfo && typeof userInfo.then === 'function') {
         userInfo.then(info => {
-          this.setData({ userInfo: info || { nickName: '用户', avatarUrl: '' } })
+          const finalInfo = info || { nickName: '用户', avatarUrl: '' }
+          this.setData({ userInfo: finalInfo })
+          this.saveUserInfo(finalInfo)
         }).catch(() => {
-          this.setData({ userInfo: { nickName: '用户', avatarUrl: '' } })
+          const defaultInfo = { nickName: '用户', avatarUrl: '' }
+          this.setData({ userInfo: defaultInfo })
+          this.saveUserInfo(defaultInfo)
         })
       } else {
-        this.setData({ userInfo: userInfo || { nickName: '用户', avatarUrl: '' } })
+        const finalInfo = userInfo || { nickName: '用户', avatarUrl: '' }
+        this.setData({ userInfo: finalInfo })
+        this.saveUserInfo(finalInfo)
       }
     } catch (error) {
       console.error('获取用户信息失败:', error)
-      this.setData({ userInfo: { nickName: '用户', avatarUrl: '' } })
+      const defaultInfo = { nickName: '用户', avatarUrl: '' }
+      this.setData({ userInfo: defaultInfo })
+      this.saveUserInfo(defaultInfo)
     }
   },
 
@@ -113,5 +128,82 @@ Page({
       content: '我的博客 v1.0.0\n\n一个记录生活点滴的小程序，支持日记、打卡和目标管理功能。',
       showCancel: false
     })
+  },
+
+  // 选择头像
+  chooseAvatar() {
+    wx.showActionSheet({
+      itemList: ['从相册选择', '拍照'],
+      success: (res) => {
+        const sourceType = res.tapIndex === 0 ? ['album'] : ['camera']
+        wx.chooseImage({
+          count: 1,
+          sizeType: ['compressed'],
+          sourceType: sourceType,
+          success: (chooseRes) => {
+            const tempFilePath = chooseRes.tempFilePaths[0]
+            // 更新本地用户信息
+            const userInfo = this.data.userInfo
+            userInfo.avatarUrl = tempFilePath
+            this.setData({ userInfo })
+            // 保存到本地存储
+            this.saveUserInfo(userInfo)
+            wx.showToast({ title: '头像已更新', icon: 'success' })
+          },
+          fail: (err) => {
+            console.error('选择头像失败:', err)
+            wx.showToast({ title: '选择失败', icon: 'none' })
+          }
+        })
+      }
+    })
+  },
+
+  // 编辑昵称
+  editNickname() {
+    wx.showModal({
+      title: '修改昵称',
+      content: '',
+      editable: true,
+      placeholderText: '请输入昵称',
+      success: (res) => {
+        if (res.confirm && res.content.trim()) {
+          const newNickname = res.content.trim()
+          if (newNickname.length > 20) {
+            wx.showToast({ title: '昵称不能超过20个字符', icon: 'none' })
+            return
+          }
+          const userInfo = this.data.userInfo
+          userInfo.nickName = newNickname
+          this.setData({ userInfo })
+          this.saveUserInfo(userInfo)
+          wx.showToast({ title: '昵称已更新', icon: 'success' })
+        }
+      }
+    })
+  },
+
+  // 保存用户信息到本地存储
+  saveUserInfo(userInfo) {
+    try {
+      const key = 'user_info_cache'
+      wx.setStorageSync(key, JSON.stringify(userInfo))
+    } catch (error) {
+      console.error('保存用户信息失败:', error)
+    }
+  },
+
+  // 从本地存储读取用户信息
+  loadUserInfoFromCache() {
+    try {
+      const key = 'user_info_cache'
+      const cached = wx.getStorageSync(key)
+      if (cached) {
+        return JSON.parse(cached)
+      }
+    } catch (error) {
+      console.error('读取用户信息缓存失败:', error)
+    }
+    return null
   }
 })
